@@ -54,7 +54,7 @@ public class MenuBar {
 		fileExit.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				System.exit(0);
+				shell.dispose();
 			}
 			
 			@Override

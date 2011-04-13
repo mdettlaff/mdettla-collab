@@ -6,8 +6,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -15,17 +14,10 @@ import org.eclipse.swt.widgets.ToolItem;
 public class MainToolBar {
 	public MainToolBar(final Shell shell) {
 		final ToolBar tool = new ToolBar(shell, SWT.WRAP);
-		tool.setLocation(shell.getClientArea().x, shell.getClientArea().y);
-		
-		shell.addListener(SWT.Resize, new Listener() {
-			@Override
-			public void handleEvent(Event arg0) {
-				tool.setSize(tool.computeSize(shell.getClientArea().width, SWT.DEFAULT));
-			}
-		});
+		tool.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, false));
 		
 		// TODO: create images
-		Image image = new Image(shell.getDisplay(), 16, 16);
+		Image image = new Image(shell.getDisplay(), 32, 32);
 		Color color = shell.getDisplay().getSystemColor(SWT.COLOR_BLUE);
 		GC gc = new GC(image);
 		gc.setBackground(color);
@@ -42,14 +34,6 @@ public class MainToolBar {
 		ToolItem synchronize = new ToolItem(tool, SWT.PUSH);
 		synchronize.setImage(image);
 		synchronize.setToolTipText(Values.TOOLTIP_SYNCHRONIZE);
-		
-		// Separator
-		new ToolItem(tool, SWT.SEPARATOR);
-		
-		// Filter
-		ToolItem filter = new ToolItem(tool, SWT.DROP_DOWN);
-		filter.setToolTipText(Values.TOOLTIP_FILTER);
-		filter.setText("Filter: All");
 		
 		// Separator
 		new ToolItem(tool, SWT.SEPARATOR);
