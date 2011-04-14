@@ -8,107 +8,74 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
 public class MenuBar {
+	private Menu menu;
+	
+	private MenuItem add;
+	private MenuItem synchronize;
+	private MenuItem exit;
+	private MenuItem search;
+	private MenuItem preferences;
+	private MenuItem about;
+	private MenuItem help;
+	
 	public MenuBar(final Shell shell) {
-		Menu menu = new Menu(shell, SWT.BAR);
+		menu = new Menu(shell, SWT.BAR);
 		shell.setMenuBar(menu);
 		// File menu
-		MenuItem file = new MenuItem(menu, SWT.CASCADE);
-		file.setText(Values.MENU_FILE);
+		MenuItem sectionFile = new MenuItem(menu, SWT.CASCADE);
+		sectionFile.setText(Values.MENU_FILE);
 		
 		Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
-		file.setMenu(fileMenu);
+		sectionFile.setMenu(fileMenu);
 		
 		// File -> Add
-		MenuItem fileAdd = new MenuItem(fileMenu, SWT.PUSH);
-		fileAdd.setText(Values.SUBMENU_ADD + "\tCtrl+A");
-		fileAdd.setAccelerator(SWT.CTRL + 'A');
-	
-		// File separator
-		new MenuItem(fileMenu, SWT.SEPARATOR);
+		add = new MenuItem(fileMenu, SWT.PUSH);
+		add.setText(Values.SUBMENU_ADD + "\tCtrl+A");
+		add.setAccelerator(SWT.CTRL + 'A');
 		
 		// File -> Synchronize
-		MenuItem fileSynchronize = new MenuItem(fileMenu, SWT.PUSH);
-		fileSynchronize.setText(Values.SUBMENU_SYNCHRONIZE + "\tCrtl+R");
-		fileSynchronize.setAccelerator(SWT.CTRL + 'R');
-		
-		// File separator
-		new MenuItem(fileMenu, SWT.SEPARATOR);
-		
-		// File -> Import
-		MenuItem fileImport = new MenuItem(fileMenu, SWT.PUSH);
-		fileImport.setText(Values.SUBMENU_IMPORT + "\tCtrl+I");
-		fileImport.setAccelerator(SWT.CTRL + 'I');
-		
-		// File -> Export
-		MenuItem fileExport = new MenuItem(fileMenu, SWT.PUSH);
-		fileExport.setText(Values.SUBMENU_EXPORT + "\tCtrl+E");
-		fileExport.setAccelerator(SWT.CTRL + 'E');
+		synchronize = new MenuItem(fileMenu, SWT.PUSH);
+		synchronize.setText(Values.SUBMENU_SYNCHRONIZE + "\tCrtl+R");
+		synchronize.setAccelerator(SWT.CTRL + 'R');
 		
 		// File separator
 		new MenuItem(fileMenu, SWT.SEPARATOR);
 		
 		// File -> Exit
-		MenuItem fileExit = new MenuItem(fileMenu, SWT.PUSH);
-		fileExit.setText(Values.SUBMENU_EXIT + "\tCtrl+X");
-		fileExit.setAccelerator(SWT.CTRL + 'X');
-		fileExit.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				shell.dispose();
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {}
-		});
+		exit = new MenuItem(fileMenu, SWT.PUSH);
+		exit.setText(Values.SUBMENU_EXIT + "\tCtrl+X");
+		exit.setAccelerator(SWT.CTRL + 'X');
 		
 		// Edit menu
-		MenuItem edit = new MenuItem(menu, SWT.CASCADE);
-		edit.setText(Values.MENU_EDIT);
+		MenuItem sectionEdit = new MenuItem(menu, SWT.CASCADE);
+		sectionEdit.setText(Values.MENU_EDIT);
 		
 		Menu editMenu = new Menu(shell, SWT.DROP_DOWN);
-		edit.setMenu(editMenu);
+		sectionEdit.setMenu(editMenu);
 		
 		// Edit -> Search
-		MenuItem editSearch = new MenuItem(editMenu, SWT.PUSH);
-		editSearch.setText(Values.SUBMENU_SEARCH + "\tCtrl+F");
-		editSearch.setAccelerator(SWT.CTRL + 'F');
-		editSearch.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				new DialogSearch(shell);
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {}
-		});
+		search = new MenuItem(editMenu, SWT.PUSH);
+		search.setText(Values.SUBMENU_SEARCH + "\tCtrl+F");
+		search.setAccelerator(SWT.CTRL + 'F');
 		
 		// File separator
 		new MenuItem(editMenu, SWT.SEPARATOR);
 		
 		// Edit -> Preferences
-		MenuItem editPreferences = new MenuItem(editMenu, SWT.PUSH);
-		editPreferences.setText(Values.SUBMENU_PREFERENCES);
-		editPreferences.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				new DialogPreferences(shell);
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {}
-		});
+		preferences = new MenuItem(editMenu, SWT.PUSH);
+		preferences.setText(Values.SUBMENU_PREFERENCES);
 		
 		// Window menu
-		MenuItem window = new MenuItem(menu, SWT.CASCADE);
-		window.setText(Values.MENU_WINDOW);
+		MenuItem sectionWindow = new MenuItem(menu, SWT.CASCADE);
+		sectionWindow.setText(Values.MENU_WINDOW);
 		
 		Menu windowMenu = new Menu(shell, SWT.DROP_DOWN);
-		window.setMenu(windowMenu);
+		sectionWindow.setMenu(windowMenu);
 		
 		// Window -> Maximize
-		MenuItem windowMaximize = new MenuItem(windowMenu, SWT.PUSH);
-		windowMaximize.setText(Values.SUBMENU_MAXIMIZE);
-		windowMaximize.addSelectionListener(new SelectionListener() {
+		MenuItem maximize = new MenuItem(windowMenu, SWT.PUSH);
+		maximize.setText(Values.SUBMENU_MAXIMIZE);
+		maximize.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				shell.setMaximized(true);
@@ -119,9 +86,9 @@ public class MenuBar {
 		});
 		
 		// Window -> Minimize
-		MenuItem windowMinimize = new MenuItem(windowMenu, SWT.PUSH);
-		windowMinimize.setText(Values.SUBMENU_MINIMIZE);
-		windowMinimize.addSelectionListener(new SelectionListener() {
+		MenuItem minimize = new MenuItem(windowMenu, SWT.PUSH);
+		minimize.setText(Values.SUBMENU_MINIMIZE);
+		minimize.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				shell.setMinimized(true);
@@ -132,9 +99,9 @@ public class MenuBar {
 		});
 		
 		// Window -> Restore
-		MenuItem windowRestore = new MenuItem(windowMenu, SWT.PUSH);
-		windowRestore.setText(Values.SUBMENU_RESTORE);
-		windowRestore.addSelectionListener(new SelectionListener() {	
+		MenuItem restore = new MenuItem(windowMenu, SWT.PUSH);
+		restore.setText(Values.SUBMENU_RESTORE);
+		restore.addSelectionListener(new SelectionListener() {	
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				shell.setMaximized(false);
@@ -145,37 +112,47 @@ public class MenuBar {
 		});
 		
 		// Help menu
-		MenuItem help = new MenuItem(menu, SWT.CASCADE);
-		help.setText(Values.MENU_HELP);
+		MenuItem sectionHelp = new MenuItem(menu, SWT.CASCADE);
+		sectionHelp.setText(Values.MENU_HELP);
 		
 		Menu helpMenu = new Menu(shell, SWT.DROP_DOWN);
-		help.setMenu(helpMenu);
+		sectionHelp.setMenu(helpMenu);
 		
 		// Help -> About
-		MenuItem helpAbout = new MenuItem(helpMenu, SWT.PUSH);
-		helpAbout.setText(Values.SUBMENU_ABOUT);
-		helpAbout.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				new DialogAbout(shell);
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {}
-		});
+		about = new MenuItem(helpMenu, SWT.PUSH);
+		about.setText(Values.SUBMENU_ABOUT);
 		
 		// Help -> Help
-		MenuItem helpHelp = new MenuItem(helpMenu, SWT.PUSH);
-		helpHelp.setText(Values.SUBMENU_HELP + "\tF1");
-		helpHelp.setAccelerator(SWT.F1);
-		helpHelp.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				new DialogHelp(shell);
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {}
-		});
+		help = new MenuItem(helpMenu, SWT.PUSH);
+		help.setText(Values.SUBMENU_HELP + "\tF1");
+		help.setAccelerator(SWT.F1);
+	}
+	
+	public MenuItem getAdd() {
+		return add;
+	}
+	
+	public MenuItem getSynchronize() {
+		return synchronize;
+	}
+	
+	public MenuItem getExit() {
+		return exit;
+	}
+	
+	public MenuItem getSearch() {
+		return search;
+	}
+	
+	public MenuItem getPreferences() {
+		return preferences;
+	}
+	
+	public MenuItem getAbout() {
+		return about;
+	}
+	
+	public MenuItem getHelp() {
+		return help;
 	}
 }

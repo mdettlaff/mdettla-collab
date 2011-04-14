@@ -1,7 +1,6 @@
 package nibblr.gui;
 
 import java.text.DateFormat;
-import java.util.Date;
 
 import nibblr.domain.FeedItem;
 
@@ -24,7 +23,7 @@ public class CompositeView {
 	private Label date;
 	private Browser view;
 	
-	public CompositeView(final Composite composite) {
+	public CompositeView(Composite composite) {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.marginWidth = 0;
@@ -54,13 +53,13 @@ public class CompositeView {
 		
 		view = new Browser(composite, SWT.BORDER);
 		view.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 2, 1));
-		
-		FeedItem item = new FeedItem();
-		item.setTitle("Title item");
-		item.setUrl("www.google.pl");
-		item.setDate(new Date());
-		item.setHTMLContent("Item content");
-		setView(item);
+	}
+	
+	public void setView() {
+		title.setText("");
+		url.setText("");
+		date.setText("");
+		view.setText("");
 	}
 	
 	public void setView(FeedItem item) {

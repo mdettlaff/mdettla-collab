@@ -1,11 +1,12 @@
 package nibblr.gui;
 
 import java.text.DateFormat;
-import java.util.Date;
+
+import nibblr.domain.FeedItem;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -15,47 +16,66 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class CompositeItems {
-	public CompositeItems(final Composite composite) {
+	private Table items;
+	
+	private Menu menu;
+	
+	private MenuItem delete;
+	
+	public CompositeItems(Composite composite) {
 		composite.setLayout(new FillLayout());
 		
-		final Table items = new Table(composite, SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		items = new Table(composite, SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		items.setHeaderVisible(true);
 		items.setLinesVisible(true);
 		new TableColumn(items, SWT.LEFT).setText(Values.ITEMS_COLUMN_TITLE);
 		new TableColumn(items, SWT.RIGHT).setText(Values.ITEMS_COLUMN_DATE);
-		
-		for(int i = 0; i < 20; i++)
-			new TableItem(items, 0).setText(new String[] {"Item " + i, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())});
-		
-		for(TableColumn column: items.getColumns())
-			column.pack();
-		
-		items.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				System.out.println(items.getItem(items.getSelectionIndex()).getText());
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {}
-		});
+		setColumnWidth();
 		
 		// Items menu
-		Menu menu = new Menu(items);
+		menu = new Menu(items);
 		items.setMenu(menu);
-		
-		// Items menu -> Delete
-		MenuItem menuDelete = new MenuItem(menu, SWT.PUSH);
-		menuDelete.setText(Values.ITEMS_MENU_DELETE);
-		menuDelete.addSelectionListener(new SelectionListener() {
+		menu.addMenuListener(new MenuListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				System.out.println(items.getItem(items.getSelectionIndex()).getText() + " DELETE");
-				items.remove(items.getSelectionIndex());
+			public void menuShown(MenuEvent e) {
+				for(MenuItem item: menu.getItems())
+					item.setEnabled(items.getSelectionIndex() != -1);
 			}
 			
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {}
+			public void menuHidden(MenuEvent e) {}
 		});
+		
+		// Items menu -> Delete
+		delete = new MenuItem(menu, SWT.PUSH);
+		delete.setText(Values.ITEMS_MENU_DELETE);
+	}
+	
+	public Table getItems() {
+		return items;
+	}
+	
+	public MenuItem getDelete() {
+		return delete;
+	}
+	
+	public void setItems() {
+		items.removeAll();
+		setColumnWidth();
+	}
+	
+	public void setItems(FeedItem[] items) {
+		this.items.removeAll();
+		for(FeedItem item: items)
+			new TableItem(this.items, SWT.NONE).setText(new String[] {
+				item.getTitle(),
+				DateFormat.getDateInstance(DateFormat.MEDIUM).format(item.getDate())});
+		setColumnWidth();
+	}
+	
+	// private
+	private void setColumnWidth() {
+		for(TableColumn column: items.getColumns())
+			column.pack();
 	}
 }
