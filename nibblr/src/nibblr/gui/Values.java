@@ -7,6 +7,7 @@ public class Values {
 	static final String TITLE_HELP = "Help";
 	static final String TITLE_PREFERENCES = "Preferences";
 	static final String TITLE_SEARCH = "Search";
+	static final String TITLE_DELETE = "Delete";
 	
 	static final String MENU_FILE = "&File";
 	static final String MENU_EDIT = "&Edit";
@@ -15,8 +16,6 @@ public class Values {
 	
 	static final String SUBMENU_ADD = "Add";
 	static final String SUBMENU_SYNCHRONIZE = "Synchronize";
-	static final String SUBMENU_IMPORT = "Import";
-	static final String SUBMENU_EXPORT = "Export";
 	static final String SUBMENU_EXIT = "Exit";
 	static final String SUBMENU_SEARCH = "Search";
 	static final String SUBMENU_PREFERENCES = "Preferences";
@@ -44,4 +43,8 @@ public class Values {
 	static final String ITEMS_COLUMN_DATE = "Date";
 	
 	static final String ITEMS_MENU_DELETE = "Delete";
+	
+	static final String DIALOG_DELETE_TEXT = "Are you sure?";
+	static final String DIALOG_DELETE_OK = "Ok";
+	static final String DIALOG_DELETE_CANCEL = "Cancel";
 }
