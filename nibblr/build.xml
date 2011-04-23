@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project default="compile">
+<project default="compile" name="nibblr">
 
 	<property name="build.dir" value="build" />
 	<property name="prod.src.dir" value="src" />
-	<property name="prod.build.dir" value="${build.dir}/main-classes" />
+	<property name="prod.build.dir" value="${build.dir}/classes" />
 	<property name="test.src.dir" value="test" />
 	<property name="test.build.dir" value="${build.dir}/test-classes" />
 
@@ -38,6 +38,11 @@
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
+		<delete>
+			<fileset dir=".">
+				<include name="*.txt" />
+			</fileset>
+		</delete>
 	</target>
 
 	<target name="compile">
@@ -71,6 +76,18 @@
 	</target>
 
 	<target name="run" depends="compile">
+		<property name="args" value="" />
+		<java classname="jade.Boot" fork="true">
+			<classpath refid="run.classpath" />
+			<arg value="-local-host" />
+			<arg value="localhost" />
+			<arg line="${args}" />
+			<arg value="-agents" />
+			<arg value="personal:nibblr.agents.PersonalAgent();delicious:nibblr.agents.DeliciousAgent()" />
+		</java>
+	</target>
+
+	<target name="gui" depends="compile">
 		<java classname="nibblr.Nibblr" fork="true">
 			<classpath refid="run.classpath" />
 		</java>

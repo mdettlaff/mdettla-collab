@@ -14,7 +14,7 @@ public class FeedTest {
 		Feed feed = getExampleFeed();
 
 		assertEquals("delicious", feed.getName());
-		assertEquals("http://delicious.com", feed.getURL());
+		assertEquals("http://delicious.com", feed.getUrl());
 		assertEquals(Arrays.asList("delicious", "links"), feed.getTags());
 		List<FeedItem> items = feed.getItems();
 		assertEquals(1, items.size());
@@ -28,7 +28,7 @@ public class FeedTest {
 	private Feed getExampleFeed() {
 		Feed feed = new Feed();
 		feed.setName("delicious");
-		feed.setURL("http://delicious.com");
+		feed.setUrl("http://delicious.com");
 		feed.addTags("delicious", "links");
 		FeedItem item = FeedItemTest.getExampleFeedItem();
 		feed.addItem(item);
