@@ -77,13 +77,13 @@
 
 	<target name="run" depends="compile">
 		<property name="args" value="" />
+		<property name="personal" value="personal:nibblr.agents.PersonalAgent()" />
+		<property name="delicious" value="delicious:nibblr.agents.DeliciousAgent()" />
 		<java classname="jade.Boot" fork="true">
 			<classpath refid="run.classpath" />
-			<arg value="-local-host" />
-			<arg value="localhost" />
 			<arg line="${args}" />
-			<arg value="-agents" />
-			<arg value="personal:nibblr.agents.PersonalAgent();delicious:nibblr.agents.DeliciousAgent()" />
+			<arg line="-local-host localhost" />
+			<arg line="-agents ${personal};${delicious}" />
 		</java>
 	</target>
 
