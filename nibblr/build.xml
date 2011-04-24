@@ -78,7 +78,7 @@
 	</target>
 
 	<target name="integration-test" depends="test">
-		<junit haltonfailure="on">
+		<junit haltonfailure="on" fork="true">
 			<batchtest>
 				<fileset dir="${test.src.dir}" includes="**/*IntegrationTest.java" />
 			</batchtest>
