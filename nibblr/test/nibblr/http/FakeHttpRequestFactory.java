@@ -15,7 +15,7 @@ public class FakeHttpRequestFactory implements HttpRequestFactory {
   		"<!-- fe06.api.del.ac4.yahoo.net compressed/chunked Sun Mar  6 13:56:07 UTC 2011 -->";
 	public static final String JOEMONSTER_RESPONSE =
 		"<?xml version=\"1.0\" encoding=\"ISO-8859-2\"?>" +
-		"<rss version=\"0.91\">" +
+		"<rss version=\"2.0\">" +
 		"<channel>" +
 		"<title>Joe Monster</title>" +
 		"<link>http://www.joemonster.org</link>" +
@@ -25,13 +25,13 @@ public class FakeHttpRequestFactory implements HttpRequestFactory {
 		"<title>Autentyki CCCXCIII - Lekarskie pogaduchy</title>" +
 		"<pubDate>Sun, 6 Mar 2011 05:00:01 +0100</pubDate>" +
 		"<link>http://www.joemonster.org/art/16474/Autentyki_CCCXCIII_Lekarskie_pogaduchy</link>" +
-		"<description><![CDATA[ Dziś o nerwowym kierowcy, szóstoklasiście, który sobie przemyśliwuje, oraz o najlepszym na świecie czujniku cofania.PRAWIDŁOWO PODSUMOWAŁSamochodem je... ]]></description>" +
+		"<description><![CDATA[Dziś o nerwowym kierowcy, szóstoklasiście, który sobie przemyśliwuje, oraz o najlepszym na świecie czujniku cofania.]]></description>" +
 		"</item>" +
 		"<item>" +
 		"<title>Wielopak Weekendowy CDVI</title>" +
 		"<pubDate>Sat, 5 Mar 2011 05:00:01 +0100</pubDate>" +
 		"<link>http://www.joemonster.org/art/16473/Wielopak_Weekendowy_CDVI</link>" +
-		"<description><![CDATA[ W dzisiejszym wielopaku zaprosimy kogoś do mieszkania, porozmawiamy kulturalnie z policją i dowiemy się, po co komu potrzebna szynszyla...8 marca. Fac... ]]></description>" +
+		"<description><![CDATA[W dzisiejszym wielopaku zaprosimy kogoś do mieszkania, porozmawiamy kulturalnie z policją i dowiemy się, po co komu potrzebna <i>szynszyla</i>.]]></description>" +
 		"</item>\n" +
 		"</channel>\n" +
 		"</rss>";

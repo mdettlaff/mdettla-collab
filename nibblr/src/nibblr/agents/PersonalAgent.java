@@ -7,7 +7,7 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.WakerBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -15,19 +15,44 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-import nibblr.ontology.Concepts.AddingSubscription;
+import nibblr.Application;
+import nibblr.ApplicationFactory;
+import nibblr.domain.Feed;
+import nibblr.domain.FeedService;
+import nibblr.ontology.AddingSubscription;
 
-public class PersonalAgent extends AbstractAgent {
+public class PersonalAgent extends AbstractAgent implements FeedService {
+
+	public static final int SUBSCRIPTION_LIST_REFRESH_INTERVAL = 1000;
+
+	private Set<Feed> allFeeds;
+
+	public PersonalAgent() {
+		allFeeds = new LinkedHashSet<Feed>();
+	}
+
+	@Override
+	public Set<Feed> getAllFeeds() {
+		return allFeeds;
+	}
 
 	@Override
 	public void setup() {
 		super.setup();
+		addBehaviours();
+		Application application = ApplicationFactory.getInstance();
+		application.setFeedService(this);
+		application.startup();
+	}
 
-		addBehaviour(new WakerBehaviour(this, 1000) {
+	private void addBehaviours() {
+		addBehaviour(new TickerBehaviour(this, SUBSCRIPTION_LIST_REFRESH_INTERVAL) {
 			@Override
-			public void onWake() {
+			public void onTick() {
 				sendSubscribeToNibbleChannels();
 			}
 		});
@@ -89,7 +114,7 @@ public class PersonalAgent extends AbstractAgent {
 				System.out.println(getLocalName() + ": subscribed to " +
 						addingSubscription.getName() +
 						" (" + addingSubscription.getUrl() + ")");
-				// TODO mdettla
+				allFeeds.add(addingSubscription);
 			}
 		} catch (UngroundedException e) {
 			e.printStackTrace();

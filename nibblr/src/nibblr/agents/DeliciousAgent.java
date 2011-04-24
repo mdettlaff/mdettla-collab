@@ -1,14 +1,12 @@
 package nibblr.agents;
 
-import nibblr.ontology.Concepts;
-import nibblr.ontology.Concepts.AddingSubscription;
+import nibblr.ontology.AddingSubscription;
 
 public class DeliciousAgent extends WebsiteAgent {
 
 	@Override
 	AddingSubscription getAddingSubscription() {
-		Concepts.AddingSubscription addingSubscription =
-			new Concepts.AddingSubscription();
+		AddingSubscription addingSubscription = new AddingSubscription();
 		addingSubscription.setName("Delicious");
 		addingSubscription.setUrl("http://delicious.com/");
 		return addingSubscription;

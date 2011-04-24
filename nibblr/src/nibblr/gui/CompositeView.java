@@ -64,7 +64,7 @@ public class CompositeView {
 	
 	public void setView(FeedItem item) {
 		title.setText(item.getTitle());
-		url.setText(String.format("<a>%s</a>", item.getURL()));
+		url.setText(String.format("<a>%s</a>", item.getUrl()));
 		date.setText(DateFormat.getDateInstance(DateFormat.FULL).format(item.getDate()));
 		view.setText(item.getHTMLContent());
 	}

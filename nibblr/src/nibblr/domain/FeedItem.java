@@ -17,7 +17,7 @@ public class FeedItem {
 		this.title = title;
 	}
 
-	public String getURL() {
+	public String getUrl() {
 		return url;
 	}
 
