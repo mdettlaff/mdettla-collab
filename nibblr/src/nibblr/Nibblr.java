@@ -1,8 +1,8 @@
 package nibblr;
 
 import nibblr.agents.PersonalAgent;
-import nibblr.domain.FeedService;
 import nibblr.gui.GUI;
+import nibblr.service.FeedService;
 
 public class Nibblr implements Application {
 

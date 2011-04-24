@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.util.List;
 
 import nibblr.domain.FeedItem;
-import nibblr.domain.FeedItemsSource;
 import nibblr.http.FakeHttpRequestFactory;
 import nibblr.http.HttpRequestFactory;
 

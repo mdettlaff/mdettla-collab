@@ -1,14 +1,25 @@
 package nibblr.agents;
 
-import nibblr.ontology.AddingSubscription;
+import java.util.List;
+
+import nibblr.domain.Feed;
+import nibblr.domain.FeedItem;
+import nibblr.http.HttpRequestFactoryFactory;
+import nibblr.sources.Delicious;
 
 public class DeliciousAgent extends WebsiteAgent {
 
 	@Override
-	AddingSubscription getAddingSubscription() {
-		AddingSubscription addingSubscription = new AddingSubscription();
-		addingSubscription.setName("Delicious");
-		addingSubscription.setUrl("http://delicious.com/");
-		return addingSubscription;
+	Feed getFeedWithNoItems() {
+		Feed feed = new Feed();
+		feed.setName("Delicious");
+		feed.setUrl("http://delicious.com/");
+		return feed;
+	}
+
+	@Override
+	public List<FeedItem> downloadItems() {
+		Delicious delicious = new Delicious(HttpRequestFactoryFactory.getInstance());
+		return delicious.downloadItems();
 	}
 }

@@ -18,6 +18,7 @@ public class NibblrOntology extends BeanOntology {
 		super(ONTOLOGY_NAME);
 		try {
 			add(AddingSubscription.class);
+			add(UpdatingSubscription.class);
 		} catch (OntologyException e) {
 			e.printStackTrace();
 		}

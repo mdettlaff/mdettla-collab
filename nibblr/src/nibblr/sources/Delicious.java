@@ -15,7 +15,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import nibblr.domain.FeedItem;
-import nibblr.domain.FeedItemsSource;
 import nibblr.http.HttpRequest;
 import nibblr.http.HttpRequestFactory;
 
