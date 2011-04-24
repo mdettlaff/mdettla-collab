@@ -15,29 +15,53 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import nibblr.Application;
 import nibblr.ApplicationFactory;
 import nibblr.domain.Feed;
-import nibblr.domain.FeedService;
 import nibblr.ontology.AddingSubscription;
+import nibblr.ontology.UpdatingSubscription;
+import nibblr.service.FeedService;
+import nibblr.service.FeedUpdateHandler;
 
 public class PersonalAgent extends AbstractAgent implements FeedService {
 
 	public static final int SUBSCRIPTION_LIST_REFRESH_INTERVAL = 1000;
 
-	private Set<Feed> allFeeds;
+	private Map<Feed, AID> allFeeds;
+	private FeedUpdateHandler feedUpdateHandler;
 
 	public PersonalAgent() {
-		allFeeds = new LinkedHashSet<Feed>();
+		allFeeds = new LinkedHashMap<Feed, AID>();
 	}
 
 	@Override
 	public Set<Feed> getAllFeeds() {
-		return allFeeds;
+		return allFeeds.keySet();
+	}
+
+	@Override
+	public void setFeedUpdateEventHandler(FeedUpdateHandler feedUpdateHandler) {
+		this.feedUpdateHandler = feedUpdateHandler;
+	}
+
+	@Override
+	public void updateFeeds(Collection<Feed> feedsToUpdate) {
+		for (Feed feedToUpdate : feedsToUpdate) {
+			System.out.println(getLocalName() + ": requesting feed update");
+			AID websiteAgent = allFeeds.get(feedToUpdate);
+			if (websiteAgent == null) {
+				throw new IllegalStateException("Unknown feed: " + feedToUpdate);
+			}
+			ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+			request.addReceiver(websiteAgent);
+			send(request);
+		}
 	}
 
 	@Override
@@ -60,12 +84,27 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 		addBehaviour(new CyclicBehaviour() {
 			@Override
 			public void action() {
+				try {
+					receiveMessages();
+				} catch (UngroundedException e) {
+					e.printStackTrace();
+				} catch (CodecException e) {
+					e.printStackTrace();
+				} catch (OntologyException e) {
+					e.printStackTrace();
+				}
+			}
+
+			private void receiveMessages()
+			throws UngroundedException, CodecException, OntologyException {
 				ACLMessage msg = receive();
 				if (msg != null) {
 					switch (msg.getPerformative()) {
 					case ACLMessage.CONFIRM:
 						handleConfirmSubscription(msg);
 						break;
+					case ACLMessage.INFORM:
+						handleInform(msg);
 					}
 				} else {
 					block();
@@ -103,25 +142,31 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 		send(msg);
 	}
 
-	private void handleConfirmSubscription(ACLMessage msg) {
+	private void handleConfirmSubscription(ACLMessage msg)
+	throws UngroundedException, CodecException, OntologyException {
 		ContentElement ce;
-		try {
-			ce = getContentManager().extractContent(msg);
-			if (ce instanceof Action) {
-				Action addSubscription = (Action)ce;
-				AddingSubscription addingSubscription =
-					(AddingSubscription)addSubscription.getAction();
-				System.out.println(getLocalName() + ": subscribed to " +
-						addingSubscription.getName() +
-						" (" + addingSubscription.getUrl() + ")");
-				allFeeds.add(addingSubscription);
-			}
-		} catch (UngroundedException e) {
-			e.printStackTrace();
-		} catch (CodecException e) {
-			e.printStackTrace();
-		} catch (OntologyException e) {
-			e.printStackTrace();
+		ce = getContentManager().extractContent(msg);
+		if (ce instanceof Action) {
+			Action addSubscription = (Action)ce;
+			AddingSubscription addingSubscription =
+				(AddingSubscription)addSubscription.getAction();
+			System.out.println(getLocalName() + ": subscribed to " +
+					addingSubscription.getName() +
+					" (" + addingSubscription.getUrl() + ")");
+			allFeeds.put(addingSubscription, msg.getSender());
+		}
+	}
+
+	private void handleInform(ACLMessage msg)
+	throws UngroundedException, CodecException, OntologyException {
+		ContentElement ce;
+		ce = getContentManager().extractContent(msg);
+		if (ce instanceof Action) {
+			Action updateSubscription = (Action)ce;
+			UpdatingSubscription updatingSubscription =
+				(UpdatingSubscription)updateSubscription.getAction();
+			System.out.println(getLocalName() + ": received updated feed");
+			feedUpdateHandler.updateFeed(updatingSubscription);
 		}
 	}
 }

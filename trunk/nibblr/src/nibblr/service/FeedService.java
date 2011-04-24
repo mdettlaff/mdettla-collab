@@ -1,6 +1,9 @@
-package nibblr.domain;
+package nibblr.service;
 
+import java.util.Collection;
 import java.util.Set;
+
+import nibblr.domain.Feed;
 
 /**
  * Usługi związane z pobieraniem kanałów i wiadomości (niblów). W kodzie
@@ -16,5 +19,7 @@ public interface FeedService {
 	 */
 	Set<Feed> getAllFeeds();
 
-	// TODO dodać metody zwracające aktualną zawartość (wiadomości) kanałów
+	void setFeedUpdateEventHandler(FeedUpdateHandler feedUpdateHandler);
+
+	void updateFeeds(Collection<Feed> feedsToUpdate);
 }

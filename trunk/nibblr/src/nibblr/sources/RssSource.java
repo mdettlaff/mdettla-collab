@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nibblr.domain.FeedItem;
-import nibblr.domain.FeedItemsSource;
 import nibblr.http.HttpRequest;
 import nibblr.http.HttpRequestFactory;
 

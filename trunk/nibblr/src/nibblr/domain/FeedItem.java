@@ -68,9 +68,9 @@ public class FeedItem {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof FeedItem))
 			return false;
-		FeedItem other = (FeedItem) obj;
+		FeedItem other = (FeedItem)obj;
 		if (htmlContent == null) {
 			if (other.htmlContent != null)
 				return false;

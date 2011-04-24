@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 import nibblr.domain.FeedItem;
-import nibblr.domain.FeedItemsSource;
 import nibblr.http.FakeHttpRequestFactory;
 
 import org.junit.Test;

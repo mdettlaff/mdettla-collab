@@ -9,7 +9,7 @@ public class ApplicationFactory {
 	}
 
 	/**
-	 * Do celów testowych, nie używać w kodzie produkcyjnym.
+	 * For testing purposes only, do not use in production code.
 	 */
 	static void setInstance(Application application) {
 		instance = application;

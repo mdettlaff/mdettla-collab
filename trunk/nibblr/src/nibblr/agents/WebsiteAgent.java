@@ -9,11 +9,14 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import nibblr.domain.Feed;
 import nibblr.ontology.AddingSubscription;
+import nibblr.ontology.UpdatingSubscription;
+import nibblr.sources.FeedItemsSource;
 
-public abstract class WebsiteAgent extends AbstractAgent {
+public abstract class WebsiteAgent extends AbstractAgent implements FeedItemsSource {
 
-	abstract AddingSubscription getAddingSubscription();
+	abstract Feed getFeedWithNoItems();
 
 	@Override
 	public void setup() {
@@ -24,16 +27,24 @@ public abstract class WebsiteAgent extends AbstractAgent {
 		addBehaviour(new CyclicBehaviour() {
 			@Override
 			public void action() {
-				receiveMessages();
+				try {
+					receiveMessages();
+				} catch (CodecException e) {
+					e.printStackTrace();
+				} catch (OntologyException e) {
+					e.printStackTrace();
+				}
 			}
 
-			private void receiveMessages() {
+			private void receiveMessages() throws CodecException, OntologyException {
 				ACLMessage msg = receive();
 				if (msg != null) {
 					switch (msg.getPerformative()) {
 					case ACLMessage.SUBSCRIBE:
 						handleSubscribe(msg);
 						break;
+					case ACLMessage.REQUEST:
+						handleRequest(msg);
 					}
 				} else {
 					block();
@@ -56,24 +67,37 @@ public abstract class WebsiteAgent extends AbstractAgent {
 		}
 	}
 
-	private void handleSubscribe(ACLMessage msg) {
-		try {
-			System.out.println(getLocalName() + ": responding to SUBSCRIBE");
-			ACLMessage response = new ACLMessage(ACLMessage.CONFIRM);
-			response.addReceiver(msg.getSender());
-			response.setLanguage(codec.getName());
-			response.setOntology(ontology.getName());
-			AddingSubscription addingSubscription = getAddingSubscription();
+	private void handleSubscribe(ACLMessage msg)
+	throws CodecException, OntologyException {
+		System.out.println(getLocalName() + ": responding to SUBSCRIBE");
+		ACLMessage response = new ACLMessage(ACLMessage.CONFIRM);
+		response.addReceiver(msg.getSender());
+		response.setLanguage(codec.getName());
+		response.setOntology(ontology.getName());
+		AddingSubscription addingSubscription =
+			new AddingSubscription(getFeedWithNoItems());
 
-			Action addSubscription = new Action();
-			addSubscription.setActor(msg.getSender());
-			addSubscription.setAction(addingSubscription);
-			getContentManager().fillContent(response, addSubscription);
-			send(response);
-		} catch (CodecException e) {
-			e.printStackTrace();
-		} catch (OntologyException e) {
-			e.printStackTrace();
-		}
+		Action addSubscription = new Action();
+		addSubscription.setActor(msg.getSender());
+		addSubscription.setAction(addingSubscription);
+		getContentManager().fillContent(response, addSubscription);
+		send(response);
+	}
+
+	private void handleRequest(ACLMessage msg)
+	throws CodecException, OntologyException {
+		System.out.println(getLocalName() + ": responding to REQUEST");
+		ACLMessage response = new ACLMessage(ACLMessage.INFORM);
+		response.addReceiver(msg.getSender());
+		response.setLanguage(codec.getName());
+		response.setOntology(ontology.getName());
+		UpdatingSubscription updatingSubscription =
+			new UpdatingSubscription(getFeedWithNoItems(), downloadItems());
+
+		Action updateSubscription = new Action();
+		updateSubscription.setActor(msg.getSender());
+		updateSubscription.setAction(updatingSubscription);
+		getContentManager().fillContent(response, updateSubscription);
+		send(response);
 	}
 }

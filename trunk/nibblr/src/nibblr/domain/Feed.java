@@ -1,18 +1,15 @@
 package nibblr.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Feed {
 
 	private String name;
 	private String url;
-	private List<String> tags;
-	private List<FeedItem> items;
+	protected List<FeedItem> items;
 
 	public Feed() {
-		tags = new ArrayList<String>();
 		items = new ArrayList<FeedItem>();
 	}
 
@@ -32,20 +29,18 @@ public class Feed {
 		this.url = url;
 	}
 
-	public void addTags(String... tags) {
-		this.tags.addAll(Arrays.asList(tags));
-	}
-
-	public List<String> getTags() {
-		return new ArrayList<String>(tags);
-	}
-
 	public void addItem(FeedItem item) {
 		items.add(item);
 	}
 
 	public List<FeedItem> getItems() {
 		return items;
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[" +
+		"url=" + url + ", items.size()=" + items.size() + "]";
 	}
 
 	@Override
@@ -58,18 +53,10 @@ public class Feed {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
+		if (!(obj instanceof Feed)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Feed other = (Feed) obj;
-		if (url == null) {
-			if (other.url != null)
-				return false;
-		} else if (!url.equals(other.url))
-			return false;
-		return true;
+		}
+		Feed other = (Feed)obj;
+		return getUrl().equals(other.getUrl());
 	}
 }

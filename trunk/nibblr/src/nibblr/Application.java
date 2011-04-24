@@ -1,6 +1,6 @@
 package nibblr;
 
-import nibblr.domain.FeedService;
+import nibblr.service.FeedService;
 
 public interface Application {
 
