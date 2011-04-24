@@ -91,11 +91,13 @@
 		<property name="args" value="" />
 		<property name="personal" value="personal:nibblr.agents.PersonalAgent()" />
 		<property name="delicious" value="delicious:nibblr.agents.DeliciousAgent()" />
+		<property name="joemonster"
+			value="joemonster:nibblr.agents.RssAgent(http://www.joemonster.org/backend.php)" />
 		<java classname="jade.Boot" fork="true">
 			<classpath refid="run.classpath" />
 			<arg line="${args}" />
 			<arg line="-local-host localhost" />
-			<arg line="-agents ${personal};${delicious}" />
+			<arg line="-agents ${personal};${delicious};${joemonster}" />
 		</java>
 	</target>
 

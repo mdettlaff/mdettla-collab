@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import jade.Boot;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import nibblr.agents.PersonalAgent;
@@ -42,6 +45,7 @@ public class FeedServiceIntegrationTest {
 		Boot.main(new String[] {
 				"-local-host", "localhost", "-agents",
 				"delicious:nibblr.agents.DeliciousAgent();" +
+				"joemonster:nibblr.agents.RssAgent(http://www.joemonster.org/backend.php);" +
 				"personal:nibblr.agents.PersonalAgent()"
 		});
 	}
@@ -55,24 +59,32 @@ public class FeedServiceIntegrationTest {
 	@Test
 	public void test() throws InterruptedException {
 		Set<Feed> feeds = testApp.downloadAllFeeds();
-		assertEquals(1, feeds.size());
-		Feed feed = feeds.iterator().next();
-		assertEquals("Delicious", feed.getName());
-		assertEquals("http://delicious.com/", feed.getUrl());
+		assertEquals(2, feeds.size());
+		Feed delicious = new Feed();
+		delicious.setUrl("http://delicious.com/");
+		Feed joeMonster = new Feed();
+		joeMonster.setUrl("http://www.joemonster.org/backend.php");
+		Set<Feed> expectedFeeds = new HashSet<Feed>(Arrays.asList(delicious, joeMonster));
+		assertEquals(expectedFeeds, feeds);
+		Iterator<Feed> feedIter = feeds.iterator();
+		assertTrue(feedIter.next().getItems().isEmpty());
+		assertTrue(feedIter.next().getItems().isEmpty());
 
-		assertTrue(feed.getItems().isEmpty());
 		testApp.updateUserFeeds();
 		Thread.sleep(250);
 		assertEquals(1, testApp.getUserFeeds().size());
 		Feed updatedFeed = testApp.getUserFeeds().iterator().next();
-		assertEquals(feed, updatedFeed);
-		assertEquals("Delicious", updatedFeed.getName());
-		assertEquals(1, updatedFeed.getItems().size());
-		FeedItem actual = updatedFeed.getItems().iterator().next();
-		FeedItem expected = new FeedItem();
-		expected.setUrl("http://java.sun.com/developer/technicalArticles/Programming/Stacktrace/");
-		expected.setTitle("An Introduction to Java Stack Traces");
-		expected.setHTMLContent("Useful advice on debugging Java programs.");
-		assertEquals(expected, actual);
+		assertEquals(joeMonster, updatedFeed);
+		assertEquals("joemonster", updatedFeed.getName());
+		assertEquals(2, updatedFeed.getItems().size());
+		FeedItem actualItem = updatedFeed.getItems().iterator().next();
+		FeedItem expectedItem = new FeedItem();
+		expectedItem.setTitle("Autentyki CCCXCIII - Lekarskie pogaduchy");
+		expectedItem.setUrl("http://www.joemonster.org/art/16474/" +
+				"Autentyki_CCCXCIII_Lekarskie_pogaduchy");
+		expectedItem.setHTMLContent("Dziś o nerwowym kierowcy, szóstoklasiście, który " +
+				"sobie przemyśliwuje, oraz o najlepszym na świecie czujniku " +
+				"cofania.");
+		assertEquals(expectedItem, actualItem);
 	}
 }

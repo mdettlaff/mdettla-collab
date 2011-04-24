@@ -28,7 +28,11 @@ public class TestApplication implements Application {
 
 	public Set<Feed> downloadAllFeeds() {
 		Set<Feed> allFeeds = feedService.getAllFeeds();
-		userFeeds = new LinkedHashSet<Feed>(allFeeds);
+		for (Feed feed : allFeeds) {
+			if (feed.getUrl().contains("joemonster")) {
+				userFeeds.add(feed);
+			}
+		}
 		return allFeeds;
 	}
 
