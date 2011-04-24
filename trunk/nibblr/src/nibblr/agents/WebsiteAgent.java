@@ -10,17 +10,23 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import nibblr.domain.Feed;
+import nibblr.http.HttpRequestFactory;
+import nibblr.http.HttpRequestFactoryFactory;
 import nibblr.ontology.AddingSubscription;
 import nibblr.ontology.UpdatingSubscription;
 import nibblr.sources.FeedItemsSource;
 
 abstract class WebsiteAgent extends AbstractAgent implements FeedItemsSource {
 
+	protected HttpRequestFactory requestFactory;
+
 	abstract Feed getFeedWithNoItems();
 
 	@Override
 	public void setup() {
 		super.setup();
+
+		requestFactory = HttpRequestFactoryFactory.getInstance();
 
 		registerServiceInDirectoryFacilitator();
 

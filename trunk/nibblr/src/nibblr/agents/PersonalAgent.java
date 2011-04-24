@@ -7,7 +7,6 @@ import jade.content.onto.UngroundedException;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -19,35 +18,34 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import nibblr.Application;
 import nibblr.ApplicationFactory;
 import nibblr.domain.Feed;
 import nibblr.ontology.AddingSubscription;
 import nibblr.ontology.UpdatingSubscription;
+import nibblr.service.FeedHandler;
 import nibblr.service.FeedService;
-import nibblr.service.FeedUpdateHandler;
 
 public class PersonalAgent extends AbstractAgent implements FeedService {
 
-	public static final int SUBSCRIPTION_LIST_REFRESH_INTERVAL = 1000;
-
 	private Map<Feed, AID> allFeeds;
-	private FeedUpdateHandler feedUpdateHandler;
+	private FeedHandler feedUpdateHandler;
+	private FeedHandler feedFoundHandler;
 
 	public PersonalAgent() {
 		allFeeds = new LinkedHashMap<Feed, AID>();
 	}
 
 	@Override
-	public Set<Feed> getAllFeeds() {
-		return allFeeds.keySet();
+	public void downloadAllFeeds(FeedHandler feedFoundHandler) {
+		this.feedFoundHandler = feedFoundHandler;
+		sendSubscribeToNibbleChannels();
 	}
 
 	@Override
 	public void updateFeeds(
-			Collection<Feed> feedsToUpdate, FeedUpdateHandler feedUpdateHandler) {
+			Collection<Feed> feedsToUpdate, FeedHandler feedUpdateHandler) {
 		this.feedUpdateHandler = feedUpdateHandler;
 		for (Feed feedToUpdate : feedsToUpdate) {
 			System.out.println(getLocalName() + ": requesting feed update");
@@ -71,13 +69,6 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 	}
 
 	private void addBehaviours() {
-		addBehaviour(new TickerBehaviour(this, SUBSCRIPTION_LIST_REFRESH_INTERVAL) {
-			@Override
-			public void onTick() {
-				sendSubscribeToNibbleChannels();
-			}
-		});
-
 		addBehaviour(new CyclicBehaviour() {
 			@Override
 			public void action() {
@@ -151,6 +142,7 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 					addingSubscription.getName() +
 					" (" + addingSubscription.getUrl() + ")");
 			allFeeds.put(addingSubscription, msg.getSender());
+			feedFoundHandler.handleFeed(addingSubscription);
 		}
 	}
 
@@ -163,7 +155,7 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 			UpdatingSubscription updatingSubscription =
 				(UpdatingSubscription)updateSubscription.getAction();
 			System.out.println(getLocalName() + ": received updated feed");
-			feedUpdateHandler.updateFeed(updatingSubscription);
+			feedUpdateHandler.handleFeed(updatingSubscription);
 		}
 	}
 }
