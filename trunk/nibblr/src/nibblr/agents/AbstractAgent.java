@@ -6,7 +6,7 @@ import jade.content.onto.Ontology;
 import jade.core.Agent;
 import nibblr.ontology.NibblrOntology;
 
-public class AbstractAgent extends Agent {
+class AbstractAgent extends Agent {
 
 	protected Codec codec = new SLCodec();
 	protected Ontology ontology = NibblrOntology.getInstance();

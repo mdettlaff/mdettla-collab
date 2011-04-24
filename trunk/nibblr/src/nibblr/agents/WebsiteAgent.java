@@ -14,7 +14,7 @@ import nibblr.ontology.AddingSubscription;
 import nibblr.ontology.UpdatingSubscription;
 import nibblr.sources.FeedItemsSource;
 
-public abstract class WebsiteAgent extends AbstractAgent implements FeedItemsSource {
+abstract class WebsiteAgent extends AbstractAgent implements FeedItemsSource {
 
 	abstract Feed getFeedWithNoItems();
 
