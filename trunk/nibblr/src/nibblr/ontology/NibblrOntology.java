@@ -11,13 +11,13 @@ public class NibblrOntology extends BeanOntology {
 	private static Ontology instance = new NibblrOntology();
 
 	public static Ontology getInstance() {
-		return instance; 
+		return instance;
 	}
 
 	private NibblrOntology() {
 		super(ONTOLOGY_NAME);
 		try {
-			add(Concepts.AddingSubscription.class);
+			add(AddingSubscription.class);
 		} catch (OntologyException e) {
 			e.printStackTrace();
 		}

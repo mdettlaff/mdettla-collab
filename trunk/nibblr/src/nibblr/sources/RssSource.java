@@ -49,6 +49,8 @@ public class RssSource implements FeedItemsSource {
 			FeedItem item = new FeedItem();
 			item.setTitle(rssItem.getTitle());
 			item.setUrl(rssItem.getUri());
+			item.setHTMLContent(rssItem.getDescription().getValue());
+			item.setDate(rssItem.getPublishedDate());
 			items.add(item);
 		}
 		return items;

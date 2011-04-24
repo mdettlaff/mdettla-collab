@@ -20,7 +20,7 @@ public class FeedTest {
 		assertEquals(1, items.size());
 		FeedItem firstItem = items.get(0);
 		assertEquals("A cool page", firstItem.getTitle());
-		assertEquals("http://coolpage.com", firstItem.getURL());
+		assertEquals("http://coolpage.com", firstItem.getUrl());
 		assertEquals("the content", firstItem.getHTMLContent());
 		assertEquals(FeedItemTest.NOW, firstItem.getDate());
 	}

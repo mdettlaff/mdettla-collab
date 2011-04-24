@@ -68,7 +68,19 @@
 	<target name="test" depends="compile-test">
 		<junit haltonfailure="on">
 			<batchtest>
-				<fileset dir="${test.src.dir}" includes="**/*Test.java" />
+				<fileset dir="${test.src.dir}" includes="**/*Test.java">
+					<exclude name="**/*IntegrationTest.java" />
+				</fileset>
+			</batchtest>
+			<formatter type="plain" usefile="false" />
+			<classpath refid="test.run.classpath" />
+		</junit>
+	</target>
+
+	<target name="integration-test" depends="test">
+		<junit haltonfailure="on">
+			<batchtest>
+				<fileset dir="${test.src.dir}" includes="**/*IntegrationTest.java" />
 			</batchtest>
 			<formatter type="plain" usefile="false" />
 			<classpath refid="test.run.classpath" />

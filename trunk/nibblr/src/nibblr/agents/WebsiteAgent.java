@@ -1,6 +1,5 @@
 package nibblr.agents;
 
-import nibblr.ontology.Concepts.AddingSubscription;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
@@ -10,6 +9,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import nibblr.ontology.AddingSubscription;
 
 public abstract class WebsiteAgent extends AbstractAgent {
 
@@ -26,7 +26,7 @@ public abstract class WebsiteAgent extends AbstractAgent {
 			public void action() {
 				receiveMessages();
 			}
-	
+
 			private void receiveMessages() {
 				ACLMessage msg = receive();
 				if (msg != null) {
@@ -64,7 +64,7 @@ public abstract class WebsiteAgent extends AbstractAgent {
 			response.setLanguage(codec.getName());
 			response.setOntology(ontology.getName());
 			AddingSubscription addingSubscription = getAddingSubscription();
-	
+
 			Action addSubscription = new Action();
 			addSubscription.setActor(msg.getSender());
 			addSubscription.setAction(addingSubscription);
