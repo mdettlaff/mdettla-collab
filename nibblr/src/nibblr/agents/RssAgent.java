@@ -4,7 +4,6 @@ import java.util.List;
 
 import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
-import nibblr.http.HttpRequestFactoryFactory;
 import nibblr.sources.FeedItemsSource;
 import nibblr.sources.RssSource;
 
@@ -28,8 +27,7 @@ public class RssAgent extends WebsiteAgent {
 
 	@Override
 	public List<FeedItem> downloadItems() {
-		FeedItemsSource source =
-			new RssSource(url, HttpRequestFactoryFactory.getInstance());
+		FeedItemsSource source = new RssSource(url, requestFactory);
 		return source.downloadItems();
 	}
 }

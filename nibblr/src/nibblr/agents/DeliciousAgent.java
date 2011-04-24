@@ -4,7 +4,6 @@ import java.util.List;
 
 import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
-import nibblr.http.HttpRequestFactoryFactory;
 import nibblr.sources.Delicious;
 
 public class DeliciousAgent extends WebsiteAgent {
@@ -19,7 +18,7 @@ public class DeliciousAgent extends WebsiteAgent {
 
 	@Override
 	public List<FeedItem> downloadItems() {
-		Delicious delicious = new Delicious(HttpRequestFactoryFactory.getInstance());
+		Delicious delicious = new Delicious(requestFactory);
 		return delicious.downloadItems();
 	}
 }

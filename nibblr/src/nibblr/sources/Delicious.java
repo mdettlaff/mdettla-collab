@@ -22,8 +22,8 @@ public class Delicious implements FeedItemsSource {
 
 	private final HttpRequestFactory requestFactory;
 
-	public Delicious(HttpRequestFactory request) {
-		this.requestFactory = request;
+	public Delicious(HttpRequestFactory requestFactory) {
+		this.requestFactory = requestFactory;
 	}
 
 	@Override

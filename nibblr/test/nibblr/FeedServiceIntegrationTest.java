@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import nibblr.agents.PersonalAgent;
 import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
 import nibblr.http.FakeHttpRequestFactory;
@@ -22,6 +21,8 @@ import org.junit.Test;
 
 public class FeedServiceIntegrationTest {
 
+	private static final int AGENT_PLATFORM_BOOT_WAIT_TIME = 1500;
+
 	private TestApplication testApp;
 	private Application defaultApp;
 	private HttpRequestFactory defaultRequestFactory;
@@ -31,7 +32,7 @@ public class FeedServiceIntegrationTest {
 		testApp = new TestApplication();
 		initializeFactories(testApp);
 		startAgentPlatform();
-		Thread.sleep(PersonalAgent.SUBSCRIPTION_LIST_REFRESH_INTERVAL + 100);
+		Thread.sleep(AGENT_PLATFORM_BOOT_WAIT_TIME);
 	}
 
 	private void initializeFactories(Application application) {
@@ -58,26 +59,31 @@ public class FeedServiceIntegrationTest {
 
 	@Test
 	public void test() throws InterruptedException {
-		Set<Feed> feeds = testApp.downloadAllFeeds();
-		assertEquals(2, feeds.size());
+		Set<Feed> allFeeds = testApp.downloadAllFeedsAndSelectUserFeeds();
+		assertEquals(2, allFeeds.size());
 		Feed delicious = new Feed();
 		delicious.setUrl("http://delicious.com/");
 		Feed joeMonster = new Feed();
 		joeMonster.setUrl("http://www.joemonster.org/backend.php");
 		Set<Feed> expectedFeeds = new HashSet<Feed>(Arrays.asList(delicious, joeMonster));
-		assertEquals(expectedFeeds, feeds);
-		Iterator<Feed> feedIter = feeds.iterator();
+		assertEquals(expectedFeeds, allFeeds);
+		Iterator<Feed> feedIter = allFeeds.iterator();
 		assertTrue(feedIter.next().getItems().isEmpty());
 		assertTrue(feedIter.next().getItems().isEmpty());
+		assertEquals(1, testApp.getUserFeeds().size());
 
 		testApp.updateUserFeeds();
-		Thread.sleep(250);
 		assertEquals(1, testApp.getUserFeeds().size());
 		Feed updatedFeed = testApp.getUserFeeds().iterator().next();
 		assertEquals(joeMonster, updatedFeed);
 		assertEquals("joemonster", updatedFeed.getName());
 		assertEquals(2, updatedFeed.getItems().size());
 		FeedItem actualItem = updatedFeed.getItems().iterator().next();
+		FeedItem expectedItem = getExpectedItem();
+		assertEquals(expectedItem, actualItem);
+	}
+
+	private FeedItem getExpectedItem() {
 		FeedItem expectedItem = new FeedItem();
 		expectedItem.setTitle("Autentyki CCCXCIII - Lekarskie pogaduchy");
 		expectedItem.setUrl("http://www.joemonster.org/art/16474/" +
@@ -85,6 +91,6 @@ public class FeedServiceIntegrationTest {
 		expectedItem.setHTMLContent("Dziś o nerwowym kierowcy, szóstoklasiście, który " +
 				"sobie przemyśliwuje, oraz o najlepszym na świecie czujniku " +
 				"cofania.");
-		assertEquals(expectedItem, actualItem);
+		return expectedItem;
 	}
 }

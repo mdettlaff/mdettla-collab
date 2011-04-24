@@ -1,7 +1,6 @@
 package nibblr.service;
 
 import java.util.Collection;
-import java.util.Set;
 
 import nibblr.domain.Feed;
 
@@ -13,11 +12,24 @@ import nibblr.domain.Feed;
 public interface FeedService {
 
 	/**
-	 * Zwraca wszystkie kanały, które aktualnie można subskrybować.
+	 * Pobiera wszystkie kanały, które aktualnie można subskrybować.
 	 * Ich lista wiadomości (niblów) jest zawsze pusta; do pobierania
-	 * treści wiadomości służą inne metody tego serwisu.
+	 * treści wiadomości służy metoda
+	 * {@link #updateFeeds(Collection, FeedHandler)}.
+	 *
+	 * @param feedFoundHandler Funkcja zwrotna wywoływana po znalezieniu
+	 *                         kanału.
 	 */
-	Set<Feed> getAllFeeds();
+	void downloadAllFeeds(FeedHandler feedFoundHandler);
 
-	void updateFeeds(Collection<Feed> feedsToUpdate, FeedUpdateHandler feedUpdateHandler);
+	/**
+	 * Aktualizuje podane kanały (uzupełnia ich listę wiadomości).
+	 *
+	 * @param feedsToUpdate     Kanały, które zostaną zaktualizowane. Podana
+	 *                          kolekcja nie jest modyfikowana.
+	 * @param feedUpdateHandler Funkcja zwrotna wywoływana po aktualizacji
+	 *                          kanału. Argumentem do niej jest zaktualizowany
+	 *                          kanał.
+	 */
+	void updateFeeds(Collection<Feed> feedsToUpdate, FeedHandler feedUpdateHandler);
 }
