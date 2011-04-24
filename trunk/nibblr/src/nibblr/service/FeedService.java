@@ -19,7 +19,5 @@ public interface FeedService {
 	 */
 	Set<Feed> getAllFeeds();
 
-	void setFeedUpdateEventHandler(FeedUpdateHandler feedUpdateHandler);
-
-	void updateFeeds(Collection<Feed> feedsToUpdate);
+	void updateFeeds(Collection<Feed> feedsToUpdate, FeedUpdateHandler feedUpdateHandler);
 }

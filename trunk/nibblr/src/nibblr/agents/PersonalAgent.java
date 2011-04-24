@@ -46,12 +46,9 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 	}
 
 	@Override
-	public void setFeedUpdateEventHandler(FeedUpdateHandler feedUpdateHandler) {
+	public void updateFeeds(
+			Collection<Feed> feedsToUpdate, FeedUpdateHandler feedUpdateHandler) {
 		this.feedUpdateHandler = feedUpdateHandler;
-	}
-
-	@Override
-	public void updateFeeds(Collection<Feed> feedsToUpdate) {
 		for (Feed feedToUpdate : feedsToUpdate) {
 			System.out.println(getLocalName() + ": requesting feed update");
 			AID websiteAgent = allFeeds.get(feedToUpdate);

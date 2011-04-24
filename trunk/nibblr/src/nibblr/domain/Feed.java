@@ -1,6 +1,7 @@
 package nibblr.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Feed {
@@ -34,7 +35,7 @@ public class Feed {
 	}
 
 	public List<FeedItem> getItems() {
-		return items;
+		return Collections.unmodifiableList(items);
 	}
 
 	@Override
