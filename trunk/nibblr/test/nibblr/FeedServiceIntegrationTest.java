@@ -36,7 +36,7 @@ public class FeedServiceIntegrationTest {
 	}
 
 	private void initializeFactories(Application application) {
-		defaultApp = ApplicationFactory.getInstance();
+		defaultApp = ApplicationFactory.getInstance(null);
 		ApplicationFactory.setInstance(application);
 		defaultRequestFactory = HttpRequestFactoryFactory.getInstance();
 		HttpRequestFactoryFactory.setInstance(new FakeHttpRequestFactory());

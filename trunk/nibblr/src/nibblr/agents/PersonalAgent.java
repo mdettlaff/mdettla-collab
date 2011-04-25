@@ -63,8 +63,7 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 	public void setup() {
 		super.setup();
 		addBehaviours();
-		Application application = ApplicationFactory.getInstance();
-		application.setFeedService(this);
+		Application application = ApplicationFactory.getInstance(this);
 		application.startup();
 	}
 
