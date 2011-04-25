@@ -1,10 +1,13 @@
 package nibblr;
 
+import nibblr.service.FeedService;
+
 public class ApplicationFactory {
 
 	private static Application instance = new Nibblr();
 
-	public static Application getInstance() {
+	public static Application getInstance(FeedService feedService) {
+		instance.setFeedService(feedService);
 		return instance;
 	}
 
