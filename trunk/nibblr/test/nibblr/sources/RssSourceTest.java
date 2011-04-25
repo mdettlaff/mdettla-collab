@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.List;
 
+import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
 import nibblr.http.FakeHttpRequestFactory;
 import nibblr.http.HttpRequestFactory;
@@ -18,8 +19,12 @@ public class RssSourceTest {
 	public void getItemsFromRss() throws ParseException {
 		String url = "http://www.joemonster.org/backend.php";
 		HttpRequestFactory requestFactory = new FakeHttpRequestFactory();
-		FeedItemsSource source = new RssSource(url, requestFactory);
-		List<FeedItem> items = source.downloadItems();
+		FeedSource feedSource = new RssSource(url, requestFactory);
+		Feed feedInfo = feedSource.downloadFeedInfo();
+		assertFeedInfo(feedInfo);
+		Feed feed = feedSource.downloadFeedWithItems();
+		assertFeedInfo(feed);
+		List<FeedItem> items = feed.getItems();
 		assertEquals(2, items.size());
 		DateFormat dateFormat = DateFormat.getDateTimeInstance();
 		{
@@ -45,6 +50,12 @@ public class RssSourceTest {
 			FeedItem actualItem = items.get(1);
 			assertFeedItemsExactlyEqual(expectedItem, actualItem);
 		}
+	}
+
+	private void assertFeedInfo(Feed feed) {
+		assertEquals("http://www.joemonster.org/", feed.getUrl());
+		assertEquals("Joe Monster", feed.getName());
+		assertEquals("Joe Monster - Bo powaga zabija powoli...", feed.getDescription());
 	}
 
 	private void assertFeedItemsExactlyEqual(

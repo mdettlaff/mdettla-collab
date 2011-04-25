@@ -64,7 +64,7 @@ public class FeedServiceIntegrationTest {
 		Feed delicious = new Feed();
 		delicious.setUrl("http://delicious.com/");
 		Feed joeMonster = new Feed();
-		joeMonster.setUrl("http://www.joemonster.org/backend.php");
+		joeMonster.setUrl("http://www.joemonster.org/");
 		Set<Feed> expectedFeeds = new HashSet<Feed>(Arrays.asList(delicious, joeMonster));
 		assertEquals(expectedFeeds, allFeeds);
 		Iterator<Feed> feedIter = allFeeds.iterator();
@@ -76,7 +76,7 @@ public class FeedServiceIntegrationTest {
 		assertEquals(1, testApp.getUserFeeds().size());
 		Feed updatedFeed = testApp.getUserFeeds().iterator().next();
 		assertEquals(joeMonster, updatedFeed);
-		assertEquals("joemonster", updatedFeed.getName());
+		assertEquals("Joe Monster", updatedFeed.getName());
 		assertEquals(2, updatedFeed.getItems().size());
 		FeedItem actualItem = updatedFeed.getItems().iterator().next();
 		FeedItem expectedItem = getExpectedItem();

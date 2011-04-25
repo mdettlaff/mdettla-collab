@@ -32,7 +32,7 @@ public class TestApplication implements Application {
 	public Set<Feed> downloadAllFeedsAndSelectUserFeeds()
 	throws InterruptedException {
 		final Set<Feed> allFeeds = new LinkedHashSet<Feed>();
-		feedService.downloadAllFeeds(new FeedHandler() {
+		feedService.downloadListOfAllFeeds(new FeedHandler() {
 			@Override
 			public void handleFeed(Feed foundFeed) {
 				allFeeds.add(foundFeed);

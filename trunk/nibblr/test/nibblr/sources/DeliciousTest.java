@@ -3,11 +3,13 @@ package nibblr.sources;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
 import nibblr.http.FakeHttpRequestFactory;
 
@@ -22,17 +24,33 @@ public class DeliciousTest {
 	}
 
 	@Test
-	public void downloadOneFeedItem() {
-		FeedItemsSource delicious = new Delicious(new FakeHttpRequestFactory());
-		List<FeedItem> items = delicious.downloadItems();
+	public void downloadOneFeedItem() throws ParseException {
+		FeedSource delicious = new Delicious(new FakeHttpRequestFactory());
+		Feed feedInfo = delicious.downloadFeedInfo();
+		assertFeedInfo(feedInfo);
+		Feed feed = delicious.downloadFeedWithItems();
+		assertFeedInfo(feed);
+		List<FeedItem> items = feed.getItems();
 		assertFalse("No feed items found.", items.isEmpty());
 		FeedItem actual = items.get(0);
+		FeedItem expected = getExpectedItem();
+		assertEquals(expected, actual);
+		assertEquals(expected.getDate(), actual.getDate());
+	}
+
+	private void assertFeedInfo(Feed feed) {
+		assertEquals("http://delicious.com/", feed.getUrl());
+		assertEquals("Delicious", feed.getName());
+		assertEquals("Bookmarking service", feed.getDescription());
+	}
+
+	private FeedItem getExpectedItem() throws ParseException {
 		FeedItem expected = new FeedItem();
 		expected.setUrl("http://java.sun.com/developer/technicalArticles/Programming/Stacktrace/");
 		expected.setTitle("An Introduction to Java Stack Traces");
 		expected.setHTMLContent("Useful advice on debugging Java programs.");
-		expected.setDate(getExampleDate());
-		assertEquals(expected, actual);
+		expected.setDate(DateFormat.getDateTimeInstance().parse("2011-02-22 20:56:06"));
+		return expected;
 	}
 
 	private static Date getExampleDate() {

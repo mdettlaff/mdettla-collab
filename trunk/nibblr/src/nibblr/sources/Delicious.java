@@ -14,11 +14,14 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
 import nibblr.http.HttpRequest;
 import nibblr.http.HttpRequestFactory;
 
-public class Delicious implements FeedItemsSource {
+public class Delicious implements FeedSource {
+
+	private static final String URL = "http://delicious.com/";
 
 	private final HttpRequestFactory requestFactory;
 
@@ -27,15 +30,30 @@ public class Delicious implements FeedItemsSource {
 	}
 
 	@Override
-	public List<FeedItem> downloadItems() {
+	public Feed downloadFeedInfo() {
+		Feed feed = new Feed();
+		feed.setName("Delicious");
+		feed.setDescription("Bookmarking service");
+		feed.setUrl(URL);
+		return feed;
+	}
+
+	@Override
+	public Feed downloadFeedWithItems() {
+		Feed feed = downloadFeedInfo();
+		feed.setItems(downloadFeedItems());
+		return feed;
+	}
+
+	private List<FeedItem> downloadFeedItems() {
 		List<FeedItem> items;
 		try {
 			String xmlResponse = getXMLResponse();
 			items = parseXMLResponse(xmlResponse);
 		} catch (XMLStreamException e) {
-			throw new RuntimeException(e);
+			throw new FeedDownloadingException(e, URL);
 		} catch (ParseException e) {
-			throw new RuntimeException(e);
+			throw new FeedDownloadingException(e, URL);
 		}
 		return items;
 	}

@@ -1,9 +1,8 @@
 package nibblr.sources;
 
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
+import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
 import nibblr.http.HttpRequest;
 import nibblr.http.HttpRequestFactory;
@@ -13,7 +12,7 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 
-public class RssSource implements FeedItemsSource {
+public class RssSource implements FeedSource {
 
 	private final HttpRequestFactory requestFactory;
 	private final String url;
@@ -24,34 +23,50 @@ public class RssSource implements FeedItemsSource {
 	}
 
 	@Override
-	public List<FeedItem> downloadItems() {
-		List<FeedItem> items;
+	public Feed downloadFeedInfo() {
+		SyndFeed rssFeed = downloadRssFeed();
+		return convertFeedInfo(rssFeed);
+	}
+
+	@Override
+	public Feed downloadFeedWithItems() {
+		SyndFeed rssFeed = downloadRssFeed();
+		Feed feed = convertFeedInfo(rssFeed);
+		for (Object rssItem : rssFeed.getEntries()) {
+			feed.addItem(convertFeedItem((SyndEntry)rssItem));
+		}
+		return feed;
+	}
+
+	private SyndFeed downloadRssFeed() {
+		SyndFeed rssFeed;
 		try {
 			HttpRequest request = requestFactory.createRequest(url);
 			String rss = request.doGet();
-			items = parseRss(rss);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
+			SyndFeedInput input = new SyndFeedInput();
+			rssFeed = input.build(new StringReader(rss));
 		} catch (FeedException e) {
-			throw new RuntimeException(e);
+			throw new FeedDownloadingException(e, url);
 		}
-		return items;
+		return rssFeed;
 	}
 
-	private List<FeedItem> parseRss(String rss)
-	throws IllegalArgumentException, FeedException {
-		List<FeedItem> items = new ArrayList<FeedItem>();
-		SyndFeedInput input = new SyndFeedInput();
-		SyndFeed feed = input.build(new StringReader(rss));
-		for (Object entry : feed.getEntries()) {
-			SyndEntry rssItem = (SyndEntry)entry;
-			FeedItem item = new FeedItem();
-			item.setTitle(rssItem.getTitle());
-			item.setUrl(rssItem.getUri());
-			item.setHTMLContent(rssItem.getDescription().getValue());
-			item.setDate(rssItem.getPublishedDate());
-			items.add(item);
-		}
-		return items;
+	private Feed convertFeedInfo(SyndFeed rssFeed) {
+		Feed feed = new Feed();
+		String link = rssFeed.getLink();
+		String url = link != null ? link : rssFeed.getUri();
+		feed.setUrl(url);
+		feed.setName(rssFeed.getTitle());
+		feed.setDescription(rssFeed.getDescription());
+		return feed;
+	}
+
+	private FeedItem convertFeedItem(SyndEntry rssItem) {
+		FeedItem item = new FeedItem();
+		item.setTitle(rssItem.getTitle());
+		item.setUrl(rssItem.getUri());
+		item.setHTMLContent(rssItem.getDescription().getValue());
+		item.setDate(rssItem.getPublishedDate());
+		return item;
 	}
 }
