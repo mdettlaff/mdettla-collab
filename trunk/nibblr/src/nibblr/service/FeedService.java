@@ -1,6 +1,7 @@
 package nibblr.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import nibblr.domain.Feed;
 
@@ -32,4 +33,11 @@ public interface FeedService {
 	 *                          kanał.
 	 */
 	void updateFeeds(Collection<Feed> feedsToUpdate, FeedHandler feedUpdateHandler);
+
+	/**
+	 * Zwraca listę polecanych kanałów, posortowanych od najbardziej do
+	 * najmniej polecanego. Najbardziej polecane są kanały podobne do tych,
+	 * które użytkownik najczęściej aktualizuje.
+	 */
+	List<Feed> recommendFeeds();
 }
