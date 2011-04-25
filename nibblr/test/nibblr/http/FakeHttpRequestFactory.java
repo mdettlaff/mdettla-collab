@@ -18,7 +18,7 @@ public class FakeHttpRequestFactory implements HttpRequestFactory {
 		"<rss version=\"2.0\">" +
 		"<channel>" +
 		"<title>Joe Monster</title>" +
-		"<link>http://www.joemonster.org</link>" +
+		"<link>http://www.joemonster.org/</link>" +
 		"<description>Joe Monster - Bo powaga zabija powoli...</description>" +
 		"<language>pl</language>" +
 		"<item>" +

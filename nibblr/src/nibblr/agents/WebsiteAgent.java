@@ -9,18 +9,17 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
-import nibblr.domain.Feed;
 import nibblr.http.HttpRequestFactory;
 import nibblr.http.HttpRequestFactoryFactory;
 import nibblr.ontology.AddingSubscription;
 import nibblr.ontology.UpdatingSubscription;
-import nibblr.sources.FeedItemsSource;
+import nibblr.sources.FeedSource;
 
-abstract class WebsiteAgent extends AbstractAgent implements FeedItemsSource {
+abstract class WebsiteAgent extends AbstractAgent {
 
 	protected HttpRequestFactory requestFactory;
 
-	abstract Feed getFeedWithNoItems();
+	protected abstract FeedSource getFeedSource();
 
 	@Override
 	public void setup() {
@@ -81,7 +80,7 @@ abstract class WebsiteAgent extends AbstractAgent implements FeedItemsSource {
 		response.setLanguage(codec.getName());
 		response.setOntology(ontology.getName());
 		AddingSubscription addingSubscription =
-			new AddingSubscription(getFeedWithNoItems());
+			new AddingSubscription(getFeedSource().downloadFeedInfo());
 
 		Action addSubscription = new Action();
 		addSubscription.setActor(msg.getSender());
@@ -98,7 +97,7 @@ abstract class WebsiteAgent extends AbstractAgent implements FeedItemsSource {
 		response.setLanguage(codec.getName());
 		response.setOntology(ontology.getName());
 		UpdatingSubscription updatingSubscription =
-			new UpdatingSubscription(getFeedWithNoItems(), downloadItems());
+			new UpdatingSubscription(getFeedSource().downloadFeedWithItems());
 
 		Action updateSubscription = new Action();
 		updateSubscription.setActor(msg.getSender());

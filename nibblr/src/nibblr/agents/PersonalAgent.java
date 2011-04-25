@@ -38,7 +38,7 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 	}
 
 	@Override
-	public void downloadAllFeeds(FeedHandler feedFoundHandler) {
+	public void downloadListOfAllFeeds(FeedHandler feedFoundHandler) {
 		this.feedFoundHandler = feedFoundHandler;
 		sendSubscribeToNibbleChannels();
 	}

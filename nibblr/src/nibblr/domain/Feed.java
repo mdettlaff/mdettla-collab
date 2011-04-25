@@ -8,6 +8,7 @@ public class Feed {
 
 	private String name;
 	private String url;
+	private String description;
 	protected List<FeedItem> items;
 
 	public Feed() {
@@ -30,12 +31,24 @@ public class Feed {
 		this.url = url;
 	}
 
-	public void addItem(FeedItem item) {
-		items.add(item);
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public List<FeedItem> getItems() {
 		return Collections.unmodifiableList(items);
+	}
+
+	public void addItem(FeedItem item) {
+		items.add(item);
+	}
+
+	public void setItems(List<FeedItem> items) {
+		this.items = items;
 	}
 
 	@Override
@@ -59,5 +72,11 @@ public class Feed {
 		}
 		Feed other = (Feed)obj;
 		return getUrl().equals(other.getUrl());
+	}
+
+	protected void copyMetadataFrom(Feed feed) {
+		setName(feed.getName());
+		setUrl(feed.getUrl());
+		setDescription(feed.getDescription());
 	}
 }

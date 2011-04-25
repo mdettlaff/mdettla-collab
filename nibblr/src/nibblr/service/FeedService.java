@@ -20,7 +20,7 @@ public interface FeedService {
 	 * @param feedFoundHandler Funkcja zwrotna wywoływana po znalezieniu
 	 *                         kanału.
 	 */
-	void downloadAllFeeds(FeedHandler feedFoundHandler);
+	void downloadListOfAllFeeds(FeedHandler feedFoundHandler);
 
 	/**
 	 * Aktualizuje podane kanały (uzupełnia ich listę wiadomości).

@@ -9,7 +9,6 @@ public class AddingSubscription extends Feed implements Concept {
 	}
 
 	public AddingSubscription(Feed feed) {
-		setName(feed.getName());
-		setUrl(feed.getUrl());
+		copyMetadataFrom(feed);
 	}
 }

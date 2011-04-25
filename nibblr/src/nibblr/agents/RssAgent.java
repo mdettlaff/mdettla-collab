@@ -1,10 +1,6 @@
 package nibblr.agents;
 
-import java.util.List;
-
-import nibblr.domain.Feed;
-import nibblr.domain.FeedItem;
-import nibblr.sources.FeedItemsSource;
+import nibblr.sources.FeedSource;
 import nibblr.sources.RssSource;
 
 public class RssAgent extends WebsiteAgent {
@@ -18,16 +14,7 @@ public class RssAgent extends WebsiteAgent {
 	}
 
 	@Override
-	Feed getFeedWithNoItems() {
-		Feed feed = new Feed();
-		feed.setName(getLocalName());
-		feed.setUrl(url);
-		return feed;
-	}
-
-	@Override
-	public List<FeedItem> downloadItems() {
-		FeedItemsSource source = new RssSource(url, requestFactory);
-		return source.downloadItems();
+	protected FeedSource getFeedSource() {
+		return new RssSource(url, requestFactory);
 	}
 }
