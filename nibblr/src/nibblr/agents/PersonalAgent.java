@@ -12,6 +12,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +23,7 @@ import java.util.Map;
 import nibblr.Application;
 import nibblr.ApplicationFactory;
 import nibblr.domain.Feed;
+import nibblr.domain.RecommendationEngine;
 import nibblr.ontology.AddingSubscription;
 import nibblr.ontology.UpdatingSubscription;
 import nibblr.service.FeedHandler;
@@ -30,11 +32,13 @@ import nibblr.service.FeedService;
 public class PersonalAgent extends AbstractAgent implements FeedService {
 
 	private Map<Feed, AID> allFeeds;
+	private RecommendationEngine recommendationEngine;
 	private FeedHandler feedUpdateHandler;
 	private FeedHandler feedFoundHandler;
 
 	public PersonalAgent() {
 		allFeeds = new LinkedHashMap<Feed, AID>();
+		recommendationEngine = new RecommendationEngine();
 	}
 
 	@Override
@@ -57,6 +61,11 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 			request.addReceiver(websiteAgent);
 			send(request);
 		}
+	}
+
+	@Override
+	public List<Feed> recommendFeeds() {
+		return recommendationEngine.recommendFeeds();
 	}
 
 	@Override
@@ -84,7 +93,7 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 
 			private void receiveMessages()
 			throws UngroundedException, CodecException, OntologyException {
-				ACLMessage msg = receive();
+				ACLMessage msg = receiveOntologicalMessage();
 				if (msg != null) {
 					switch (msg.getPerformative()) {
 					case ACLMessage.CONFIRM:
@@ -96,6 +105,14 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 				} else {
 					block();
 				}
+			}
+
+			private ACLMessage receiveOntologicalMessage() {
+				MessageTemplate messageTemplate = MessageTemplate.and(
+						MessageTemplate.MatchLanguage(codec.getName()),
+						MessageTemplate.MatchOntology(ontology.getName()));
+				ACLMessage msg = receive(messageTemplate);
+				return msg;
 			}
 		});
 	}
@@ -141,6 +158,7 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 					addingSubscription.getName() +
 					" (" + addingSubscription.getUrl() + ")");
 			allFeeds.put(addingSubscription, msg.getSender());
+			recommendationEngine.addFeed(addingSubscription);
 			feedFoundHandler.handleFeed(addingSubscription);
 		}
 	}
@@ -155,6 +173,7 @@ public class PersonalAgent extends AbstractAgent implements FeedService {
 				(UpdatingSubscription)updateSubscription.getAction();
 			System.out.println(getLocalName() + ": received updated feed");
 			feedUpdateHandler.handleFeed(updatingSubscription);
+			recommendationEngine.showInterestIn(updatingSubscription);
 		}
 	}
 }
