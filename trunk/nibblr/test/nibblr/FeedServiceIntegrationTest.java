@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public class FeedServiceIntegrationTest {
 
-	private static final int AGENT_PLATFORM_BOOT_WAIT_TIME = 1500;
+	private static final long TIME_TO_WAIT_FOR_AGENTS_TO_LOAD = 250;
 
 	private TestApplication testApp;
 	private Application defaultApp;
@@ -32,7 +32,7 @@ public class FeedServiceIntegrationTest {
 		testApp = new TestApplication();
 		initializeFactories(testApp);
 		startAgentPlatform();
-		Thread.sleep(AGENT_PLATFORM_BOOT_WAIT_TIME);
+		Thread.sleep(TIME_TO_WAIT_FOR_AGENTS_TO_LOAD);
 	}
 
 	private void initializeFactories(Application application) {
@@ -58,7 +58,7 @@ public class FeedServiceIntegrationTest {
 	}
 
 	@Test
-	public void test() throws InterruptedException {
+	public void test() {
 		Set<Feed> allFeeds = testApp.downloadAllFeedsAndSelectUserFeeds();
 		assertEquals(2, allFeeds.size());
 		Feed delicious = new Feed();
