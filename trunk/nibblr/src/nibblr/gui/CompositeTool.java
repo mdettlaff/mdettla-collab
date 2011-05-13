@@ -1,6 +1,8 @@
 package nibblr.gui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -15,6 +17,7 @@ public class CompositeTool {
 	
 	private ToolBar tool;
 	private ToolItem add;
+	private ToolItem recommend;
 	private ToolItem synchronize;
 	private ToolItem search;
 	private ToolItem preference;
@@ -29,6 +32,11 @@ public class CompositeTool {
 		add = new ToolItem(tool, SWT.PUSH);
 		add.setImage(getImage("add.png"));
 		add.setToolTipText(Values.TOOLTIP_ADD);
+		
+		// Recommend
+		recommend = new ToolItem(tool, SWT.PUSH);
+		recommend.setImage(getImage("recommend.png"));
+		recommend.setToolTipText(Values.TOOLTIP_RECOMMEND);
 		
 		// Synchronize
 		synchronize = new ToolItem(tool, SWT.PUSH);
@@ -52,20 +60,64 @@ public class CompositeTool {
 		preference.setToolTipText(Values.TOOLTIP_PREFERENCES);
 	}
 	
-	public ToolItem getAdd() {
-		return add;
+	public void addActionAdd(final Action action) {
+		add.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public ToolItem getSynchronize() {
-		return synchronize;
+	public void addActionRecommend(final Action action) {
+		recommend.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public ToolItem getSearch() {
-		return search;
+	public void addActionSynchronize(final Action action) {
+		synchronize.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public ToolItem getPreference() {
-		return preference;
+	public void addActionSearch(final Action action) {
+		search.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
+	}
+	
+	public void addActionPreference(final Action action) {
+		preference.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
 	// private

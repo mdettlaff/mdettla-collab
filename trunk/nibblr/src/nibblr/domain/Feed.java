@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Feed {
-
+	
 	private String name;
 	private String url;
 	private String description;

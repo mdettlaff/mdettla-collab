@@ -5,6 +5,8 @@ import nibblr.domain.Feed;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
@@ -16,8 +18,8 @@ public class CompositeChannels {
 	
 	private Menu menu;
 	
+	private MenuItem mark;
 	private MenuItem synchronize;
-	private MenuItem edit;
 	private MenuItem delete;
 	
 	public CompositeChannels(Composite composite) {
@@ -39,13 +41,13 @@ public class CompositeChannels {
 			public void menuHidden(MenuEvent e) {}
 		});
 		
+		// Channels menu -> Mark
+		mark = new MenuItem(menu, SWT.PUSH);
+		mark.setText(Values.CHANNELS_MENU_MARK);
+		
 		// Channels menu -> Synchronize
 		synchronize = new MenuItem(menu, SWT.PUSH);
 		synchronize.setText(Values.CHANNELS_MENU_SYNCHRONIZE);
-		
-		// Channels menu -> Edit
-		edit = new MenuItem(menu, SWT.PUSH);
-		edit.setText(Values.CHANNELS_MENU_EDIT);
 		
 		// Channels menu -> Separator
 		new MenuItem(menu, SWT.SEPARATOR);
@@ -55,28 +57,75 @@ public class CompositeChannels {
 		delete.setText(Values.CHANNELS_MENU_DELETE);
 	}
 	
-	public List getChannels() {
-		return channels;
+	public void addAction(final Action action) {
+		channels.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public MenuItem getSynchronize() {
-		return synchronize;
-	}
-	public MenuItem getEdit() {
-		return edit;
+	public void addMarkAction(final Action action) {
+		mark.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public MenuItem getDelete() {
-		return delete;
+	public void addSynchronizeAction(final Action action) {
+		synchronize.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
+	}
+	
+	public void addDeleteAction(final Action action) {
+		delete.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
 	public void setChannels() {
 		channels.removeAll();
 	}
 	
-	public void setChannels(Feed[] channels) {
+	public void setChannels(java.util.List<Feed> channels) {
 		this.channels.removeAll();
-		for(Feed channel: channels)
+		for(Feed channel: channels) {
+			this.channels.setData("" + this.channels.getItemCount(), channel);
 			this.channels.add(channel.getName());
+		}
+	}
+	
+	public Feed getChannel() {
+		return (Feed)channels.getData("" + channels.getSelectionIndex());
+	}
+	
+	public void selectChannel(Feed channel) {
+		for(int i = 0; i < channels.getItemCount(); i++)
+			if(channels.getData("" + i) == channel) {
+				channels.select(i);
+				return;
+			}
 	}
 }

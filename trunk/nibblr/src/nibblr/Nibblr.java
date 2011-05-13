@@ -1,6 +1,8 @@
 package nibblr;
 
 import nibblr.agents.PersonalAgent;
+import nibblr.data.DataSimple;
+import nibblr.gui.FeedServiceGUITest;
 import nibblr.gui.GUI;
 import nibblr.service.FeedService;
 
@@ -17,7 +19,7 @@ public class Nibblr implements Application {
 
 	@Override
 	public void startup() {
-		new GUI();
+		new GUI(new DataSimple(), feedService);
 	}
 
 	/**
@@ -29,7 +31,7 @@ public class Nibblr implements Application {
 		Application nibblr = new Nibblr();
 		// zamiast null można przekazać mock object implementujący FeedService
 		// do łatwiejszego testowania GUI
-		nibblr.setFeedService(null);
+		nibblr.setFeedService(new FeedServiceGUITest());
 		nibblr.startup();
 	}
 }

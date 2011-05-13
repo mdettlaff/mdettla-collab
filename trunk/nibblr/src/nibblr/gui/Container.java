@@ -18,6 +18,7 @@ public class Container {
 	private double sashHorizontalRatio = 0.45;
 	
 	private Composite container;
+	private Composite containerFilter;
 	private Composite containerChannels;
 	private Composite containerItems;
 	private Composite containerView;
@@ -25,6 +26,7 @@ public class Container {
 	private Sash sashVertical;
 	private Sash sashHorizontal;
 	
+	private CompositeFilter filter;
 	private CompositeChannels channels;
 	private CompositeItems items;
 	private CompositeView view;
@@ -33,6 +35,7 @@ public class Container {
 		container = new Composite(shell, SWT.NONE);
 		container.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		
+		containerFilter = new Composite(container, SWT.NONE);
 		containerChannels = new Composite(container, SWT.NONE);
 		containerItems = new Composite(container, SWT.NONE);
 		containerView = new Composite(container, SWT.NONE);
@@ -69,9 +72,14 @@ public class Container {
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		});
 		
+		filter = new CompositeFilter(containerFilter);
 		channels = new CompositeChannels(containerChannels);
 		items = new CompositeItems(containerItems);
 		view = new CompositeView(containerView);
+	}
+	
+	public CompositeFilter getFilter() {
+		return filter;
 	}
 	
 	public CompositeChannels getChannels() {
@@ -90,11 +98,16 @@ public class Container {
 	private void layout() {
 		int x = (int)(sashVerticalRatio * container.getBounds().width);
 		int y = (int)(sashHorizontalRatio * container.getBounds().height);
-		containerChannels.setBounds(
+		containerFilter.setBounds(
 			MARGIN,
 			0,
 			x - MARGIN,
-			container.getBounds().height - MARGIN);
+			containerFilter.computeSize(x, SWT.DEFAULT).y);
+		containerChannels.setBounds(
+			MARGIN,
+			containerFilter.getBounds().height + SPACING,
+			x - MARGIN,
+			container.getBounds().height - MARGIN - containerFilter.getBounds().height - SPACING);
 		sashVertical.setBounds(
 			x,
 			0,
