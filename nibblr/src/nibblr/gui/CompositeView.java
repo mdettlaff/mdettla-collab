@@ -1,7 +1,9 @@
 package nibblr.gui;
 
 import java.text.DateFormat;
+import java.util.Date;
 
+import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
 
 import org.eclipse.swt.SWT;
@@ -34,10 +36,13 @@ public class CompositeView {
 		title = new Label(composite, SWT.NONE);
 		title.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, false, 2, 1));
 		FontData fontData = composite.getDisplay().getSystemFont().getFontData()[0];
-		title.setFont(new Font(composite.getDisplay(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD)));
+		title.setFont(new Font(composite.getDisplay(),
+			new FontData(fontData.getName(),
+			(int)(fontData.getHeight() * 1.2),
+			SWT.BOLD)));
 		
 		url = new Link(composite, SWT.NONE);
-		url.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, true, false));
+		url.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, false, 1, 1));
 		url.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -49,7 +54,7 @@ public class CompositeView {
 		});
 		
 		date = new Label(composite, SWT.NONE);
-		date.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false));
+		date.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false, 1, 1));
 		
 		view = new Browser(composite, SWT.BORDER);
 		view.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 2, 1));
@@ -60,12 +65,33 @@ public class CompositeView {
 		url.setText("");
 		date.setText("");
 		view.setText("");
+		layout();
+	}
+	
+	public void setView(Feed channel) {
+		title.setText(channel.getName());
+		url.setText("<a>" + channel.getUrl() + "</a>");
+		date.setText("");
+		view.setText(htmlTemplate(channel.getDescription()));
+		layout();
 	}
 	
 	public void setView(FeedItem item) {
 		title.setText(item.getTitle());
-		url.setText(String.format("<a>%s</a>", item.getUrl()));
+		url.setText("<a>" + item.getUrl() + "</a>");
 		date.setText(DateFormat.getDateInstance(DateFormat.FULL).format(item.getDate()));
-		view.setText(item.getHTMLContent());
+		view.setText(htmlTemplate(item.getHTMLContent()));
+		layout();
+	}
+	
+	// private
+	private String htmlTemplate(String content) {
+		return "<html><head></head><body>" + content + "</body></html>";
+	}
+	
+	private void layout() {
+		date.setSize(date.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		url.setSize(url.computeSize(url.getParent().getSize().x - date.getSize().x, SWT.DEFAULT));
+		url.getParent().layout();
 	}
 }

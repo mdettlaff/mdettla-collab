@@ -11,6 +11,7 @@ public class MenuBar {
 	private Menu menu;
 	
 	private MenuItem add;
+	private MenuItem recommend;
 	private MenuItem synchronize;
 	private MenuItem exit;
 	private MenuItem search;
@@ -32,6 +33,11 @@ public class MenuBar {
 		add = new MenuItem(fileMenu, SWT.PUSH);
 		add.setText(Values.SUBMENU_ADD + "\tCtrl+A");
 		add.setAccelerator(SWT.CTRL + 'A');
+		
+		// File -> Recommend
+		recommend = new MenuItem(fileMenu, SWT.PUSH);
+		recommend.setText(Values.SUBMENU_RECOMMEND + "\tCtrl+Shift+A");
+		recommend.setAccelerator(SWT.CTRL + SWT.SHIFT + 'A');
 		
 		// File -> Synchronize
 		synchronize = new MenuItem(fileMenu, SWT.PUSH);
@@ -128,31 +134,99 @@ public class MenuBar {
 		help.setAccelerator(SWT.F1);
 	}
 	
-	public MenuItem getAdd() {
-		return add;
+	public void addActionAdd(final Action action) {
+		add.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public MenuItem getSynchronize() {
-		return synchronize;
+	public void addActionRecommand(final Action action) {
+		recommend.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public MenuItem getExit() {
-		return exit;
+	public void addActionSynchronize(final Action action) {
+		synchronize.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public MenuItem getSearch() {
-		return search;
+	public void addActionExit(final Action action) {
+		exit.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public MenuItem getPreferences() {
-		return preferences;
+	public void addActionSearch(final Action action) {
+		search.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public MenuItem getAbout() {
-		return about;
+	public void addActionPreferences(final Action action) {
+		preferences.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 	
-	public MenuItem getHelp() {
-		return help;
+	public void addActionAbout(final Action action) {
+		about.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
+	}
+	
+	public void addActionHelp(final Action action) {
+		help.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 }

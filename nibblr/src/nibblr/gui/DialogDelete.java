@@ -35,6 +35,7 @@ public class DialogDelete {
 		cancel = new Button(this.shell, SWT.PUSH);
 		cancel.setLayoutData(new GridData(GridData.END, GridData.CENTER, true, false, 2, 1));
 		cancel.setText(Values.DIALOG_DELETE_CANCEL);
+		cancel.setFocus();
 		cancel.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -62,7 +63,25 @@ public class DialogDelete {
 		this.shell.open();
 	}
 	
-	public Button getOk() {
-		return ok;
+	public void addActionOk(final Action action) {
+		ok.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
+	}
+	
+	public void addActionCancel(final Action action) {
+		cancel.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				action.action();
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
 	}
 }
