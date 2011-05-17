@@ -18,11 +18,11 @@ public class DialogDelete {
 	private Button ok;
 	private Button cancel;
 	
-	public DialogDelete(Shell shell) {
-		this.shell = new Shell(shell, SWT.DIALOG_TRIM);
-		this.shell.setText(Values.TITLE_DELETE);
-		this.shell.setImage(this.shell.getDisplay().getSystemImage(SWT.ICON_QUESTION));
-		this.shell.setLayout(new GridLayout(3, false));
+	public DialogDelete(Shell parentShell) {
+		shell = new Shell(parentShell, SWT.DIALOG_TRIM);
+		shell.setText(Values.TITLE_DELETE);
+		shell.setImage(this.shell.getDisplay().getSystemImage(SWT.ICON_QUESTION));
+		shell.setLayout(new GridLayout(3, false));
 		
 		icon = new Label(this.shell, SWT.NONE);
 		icon.setLayoutData(new GridData(GridData.CENTER, GridData.CENTER, false, false));
@@ -36,28 +36,10 @@ public class DialogDelete {
 		cancel.setLayoutData(new GridData(GridData.END, GridData.CENTER, true, false, 2, 1));
 		cancel.setText(Values.DIALOG_DELETE_CANCEL);
 		cancel.setFocus();
-		cancel.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				DialogDelete.this.shell.dispose();
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {}
-		});
 		
 		ok = new Button(this.shell, SWT.PUSH);
 		ok.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, false, false));
 		ok.setText(Values.DIALOG_DELETE_OK);
-		ok.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				DialogDelete.this.shell.dispose();
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {}
-		});
 		
 		this.shell.setSize(this.shell.computeSize(250, SWT.DEFAULT));
 		this.shell.open();
@@ -83,5 +65,10 @@ public class DialogDelete {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		});
+	}
+	
+	public void dispose() {
+		if(!shell.isDisposed())
+			shell.dispose();
 	}
 }

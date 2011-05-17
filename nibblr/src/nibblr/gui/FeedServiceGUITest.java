@@ -58,7 +58,7 @@ public class FeedServiceGUITest implements FeedService {
 					@Override
 					public void run() {
 						List<FeedItem> items = new LinkedList<FeedItem>(f.getItems());
-						for(int i = 0; i < random.nextInt(5); i++)
+						for(int i = 0; i < random.nextInt(10) + 5; i++)
 							items.add(createFeedItem(f));
 						f.setItems(items);
 						handler.handleFeed(f);
@@ -90,7 +90,7 @@ public class FeedServiceGUITest implements FeedService {
 		item.setTitle("Item " + t);
 		item.setUrl(feed.getUrl() + "/item" + t);
 		item.setHTMLContent("<h2>Item " + t + "</h2><p>Item content</p>");
-		item.setDate(new Date(t - (long)(random.nextGaussian() * 2592000000l)));
+		item.setDate(new Date(System.currentTimeMillis() - (long)(random.nextGaussian() * 2592000000l)));
 		return item;
 	}
 }
