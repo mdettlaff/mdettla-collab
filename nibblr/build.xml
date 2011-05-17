@@ -93,11 +93,13 @@
 		<property name="delicious" value="delicious:nibblr.agents.DeliciousAgent()" />
 		<property name="joemonster"
 			value="joemonster:nibblr.agents.RssAgent(http://www.joemonster.org/backend.php)" />
+		<property name="debian"
+			value="debian:nibblr.agents.RssAgent(http://planet.debian.net/rss20.xml)" />
 		<java classname="jade.Boot" fork="true">
 			<classpath refid="run.classpath" />
 			<arg line="${args}" />
 			<arg line="-local-host localhost" />
-			<arg line="-agents ${personal};${delicious};${joemonster}" />
+			<arg line="-agents ${personal};${delicious};${joemonster};${debian}" />
 		</java>
 	</target>
 
