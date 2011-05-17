@@ -18,4 +18,8 @@ public interface Data {
 	public void removeFeed(Feed feed);
 	
 	public void updateFeedItems(Feed feed) throws DataNotFoundException;
+	
+	public void read(FeedItem feedItem);
+	
+	public boolean isRead(FeedItem feedItem);
 }

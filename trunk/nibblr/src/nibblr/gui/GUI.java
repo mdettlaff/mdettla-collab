@@ -29,6 +29,9 @@ public class GUI implements Runnable {
 	private CompositeItems items;
 	private CompositeView view;
 	
+	private boolean isAdd;
+	private boolean isRecommend;
+	
 	public GUI(Data data, FeedService feedService) {
 		this.data = data;
 		this.feedService = feedService;
@@ -55,6 +58,9 @@ public class GUI implements Runnable {
 		items = container.getItems();
 		view = container.getView();
 		
+		isAdd = false;
+		isRecommend = false;
+		
 		action();
 		
 		shell.open();
@@ -68,6 +74,9 @@ public class GUI implements Runnable {
 	// private
 	
 	private void add() {
+		if(isAdd)
+			return;
+		isAdd = true;
 		final List<Feed> feeds = new LinkedList<Feed>();
 		final DialogAdd add = new DialogAdd(shell);
 		feedService.downloadListOfAllFeeds(new FeedHandler() {
@@ -89,51 +98,100 @@ public class GUI implements Runnable {
 		add.addActionOk(new Action() {
 			@Override
 			public void action() {
-				for(Feed channel: add.getChannels())
+				for(Feed channel: add.getChannels()) {
 					data.addFeed(channel);
+					synchronize(channel);
+				}
 				Feed channel = channels.getChannel();
 				channels.setChannels(data.getFeeds());
 				channels.selectChannel(channel);
 				add.dispose();
+				isAdd = false;
 			}
 		});
 		add.addActionCancel(new Action() {
 			@Override
 			public void action() {
 				add.dispose();
+				isAdd = false;
 			}
 		});
 	}
 	
 	private void recommend() {
+		if(isRecommend)
+			return;
+		isRecommend = true;
 		final DialogRecommend recommend = new DialogRecommend(shell);
 		recommend.setChannels(feedService.recommendFeeds());
 		recommend.addActionOk(new Action() {
 			@Override
 			public void action() {
 				recommend.getChannels();
-				for(Feed channel: recommend.getChannels())
+				for(Feed channel: recommend.getChannels()) {
 					data.addFeed(channel);
+					synchronize(channel);
+				}
 				Feed channel = channels.getChannel();
 				channels.setChannels(data.getFeeds());
 				channels.selectChannel(channel);
 				recommend.dispose();
+				isRecommend = false;
 			}
 		});
 		recommend.addActionCancel(new Action() {
 			@Override
 			public void action() {
 				recommend.dispose();
+				isRecommend = false;
 			}
 		});
 	}
 	
 	private void synchronize() {
-		System.out.println("action -> synchronize -> all");
+		feedService.updateFeeds(data.getFeeds(), new FeedHandler() {
+			@Override
+			public void handleFeed(Feed feed) {
+				final Feed f = feed;
+				display.syncExec(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							data.updateFeedItems(f);
+							if(f == channels.getChannel()) {
+								FeedItem select = items.getItem();
+								items.setItems(data.getFeedItems(f, filter.getFilterStat()), data);
+								items.selectItem(select);
+							}
+						} catch (DataNotFoundException e) {}
+					}
+				});
+			}
+		});
 	}
 	
 	private void synchronize(Feed channel) {
-		System.out.println("action -> synchronize -> one");
+		List<Feed> feeds = new LinkedList<Feed>();
+		feeds.add(channel);
+		feedService.updateFeeds(feeds, new FeedHandler() {
+			@Override
+			public void handleFeed(Feed feed) {
+				final Feed f = feed;
+				display.syncExec(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							data.updateFeedItems(f);
+							if(f == channels.getChannel()) {
+								FeedItem select = items.getItem();
+								items.setItems(data.getFeedItems(f, filter.getFilterStat()), data);
+								items.selectItem(select);
+							}
+						} catch (DataNotFoundException e) {}
+					}
+				});
+			}
+		});
 	}
 	
 	private void exit() {
@@ -164,14 +222,14 @@ public class GUI implements Runnable {
 	private void selectFilter() {
 		try {
 			Feed channel = channels.getChannel();
-			items.setItems(data.getFeedItems(channel, filter.getFilterStat()));
+			items.setItems(data.getFeedItems(channel, filter.getFilterStat()), data);
 		} catch (DataNotFoundException e) {}
 	}
 	
 	private void selectChannel() {
 		try {
 			Feed channel = channels.getChannel();
-			items.setItems(data.getFeedItems(channel, filter.getFilterStat()));
+			items.setItems(data.getFeedItems(channel, filter.getFilterStat()), data);
 			view.setView(channel);
 		} catch (DataNotFoundException e) {}
 	}
@@ -179,9 +237,9 @@ public class GUI implements Runnable {
 	private void selectItem() {
 		try {
 			FeedItem item = items.getItem();
-			item.setRead(true);
+			data.read(item);
 			Feed channel = data.getFeed(item);
-			items.setItems(data.getFeedItems(channel, filter.getFilterStat()));
+			items.setItems(data.getFeedItems(channel, filter.getFilterStat()), data);
 			items.selectItem(item);
 			view.setView(item);
 		} catch (DataNotFoundException e) {}
@@ -191,8 +249,8 @@ public class GUI implements Runnable {
 		try {
 			Feed channel = channels.getChannel();
 			for(FeedItem item: data.getFeedItems(channel, Filter.ALL))
-				item.setRead(true);
-			items.setItems(data.getFeedItems(channel, filter.getFilterStat()));
+				data.read(item);
+			items.setItems(data.getFeedItems(channel, filter.getFilterStat()), data);
 		} catch (DataNotFoundException e) {}
 	}
 	
@@ -202,12 +260,21 @@ public class GUI implements Runnable {
 	
 	private void channelDelete() {
 		final Feed channel = channels.getChannel();
-		DialogDelete delete = new DialogDelete(shell);
+		final DialogDelete delete = new DialogDelete(shell);
 		delete.addActionOk(new Action() {
 			@Override
 			public void action() {
 				data.removeFeed(channel);
 				channels.setChannels(data.getFeeds());
+				items.setItems();
+				view.setView();
+				delete.dispose();
+			}
+		});
+		delete.addActionCancel(new Action() {
+			@Override
+			public void action() {
+				delete.dispose();
 			}
 		});
 	}

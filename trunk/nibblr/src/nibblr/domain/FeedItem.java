@@ -8,7 +8,6 @@ public class FeedItem {
 	private String url;
 	private String htmlContent;
 	private Date date;
-	private Boolean read;
 
 	public String getTitle() {
 		return title;
@@ -40,14 +39,6 @@ public class FeedItem {
 
 	public Date getDate() {
 		return date;
-	}
-	
-	public Boolean isRead() {
-		return read;
-	}
-	
-	public void setRead(Boolean read) {
-		this.read = read;;
 	}
 
 	@Override

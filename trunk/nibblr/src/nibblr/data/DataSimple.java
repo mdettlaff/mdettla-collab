@@ -15,10 +15,12 @@ public class DataSimple implements Data {
 	
 	private List<Feed> feeds;
 	private Map<FeedItem, Feed> items;
+	private List<FeedItem> read;
 	
 	public DataSimple() {
 		feeds = new LinkedList<Feed>();
 		items = new LinkedHashMap<FeedItem, Feed>();
+		read = new LinkedList<FeedItem>();
 	}
 
 	@Override
@@ -52,12 +54,12 @@ public class DataSimple implements Data {
 		switch(filter) {
 		case READ:
 			for(FeedItem feedItem: feed.getItems())
-				if(feedItem.isRead())
+				if(isRead(feedItem))
 					feedItems.add(feedItem);
 			break;
 		case UNRREAD:
 			for(FeedItem feedItem: feed.getItems())
-				if(!feedItem.isRead())
+				if(!isRead(feedItem))
 					feedItems.add(feedItem);
 			break;
 		default:
@@ -78,15 +80,19 @@ public class DataSimple implements Data {
 	public void updateFeedItems(Feed feed) throws DataNotFoundException {
 		if(!feeds.contains(feed))
 			throw new DataNotFoundException();
-		Feed f = feeds.get(feeds.indexOf(feed));
-		List<FeedItem> feedItems = new LinkedList<FeedItem>(f.getItems());
 		for(FeedItem feedItem: feed.getItems())
-			if(!feedItems.contains(feedItem)) {
-				feedItem.setRead(false);
-				feedItems.add(feedItem);
-				items.put(feedItem, f);
-			}
-		f.setItems(feedItems);
+			items.put(feedItem, feed);
+	}
+	
+	public void read(FeedItem feedItem) {
+		if(!read.contains(feedItem))
+			read.add(feedItem);
+	}
+	
+	public boolean isRead(FeedItem feedItem) {
+		if(read.contains(feedItem))
+			return true;
+		return false;
 	}
 	
 	class ComparatorFeed implements Comparator<Feed> {

@@ -3,6 +3,7 @@ package nibblr.gui;
 import java.text.DateFormat;
 import java.util.List;
 
+import nibblr.data.Data;
 import nibblr.domain.FeedItem;
 
 import org.eclipse.swt.SWT;
@@ -54,14 +55,14 @@ public class CompositeItems {
 		setColumnWidth();
 	}
 	
-	public void setItems(List<FeedItem> items) {
+	public void setItems(List<FeedItem> items, Data data) {
 		this.items.removeAll();
 		for(FeedItem item: items) {
 			this.items.setData("" + this.items.getItemCount(), item);
 			TableItem tableItem = new TableItem(this.items, SWT.NONE, this.items.getItemCount());
 			tableItem.setText(0, item.getTitle());
 			tableItem.setText(1, DateFormat.getDateInstance(DateFormat.MEDIUM).format(item.getDate()));
-			tableItem.setFont((item.isRead() ? fontRead : fontUnread));
+			tableItem.setFont((data.isRead(item) ? fontRead : fontUnread));
 		}
 		setColumnWidth();
 	}
