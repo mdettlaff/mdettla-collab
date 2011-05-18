@@ -56,4 +56,8 @@ public class Values {
 	static final String DIALOG_ADD_LABEL = DIALOG_RECOMMEND_LABEL;
 	static final String DIALOG_ADD_OK = DIALOG_RECOMMEND_OK;
 	static final String DIALOG_ADD_CANCEL = DIALOG_RECOMMEND_CANCEL;
+	
+	static final String DIALOG_SEARCH_KEYWORDS = "Keywords:";
+	static final String DIALOG_SEARCH_FIND = "Find";
+	static final String DIALOG_SEARCH_CANCEL = "Cancel";
 }

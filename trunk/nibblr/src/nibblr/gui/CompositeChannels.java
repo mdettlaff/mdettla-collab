@@ -127,5 +127,6 @@ public class CompositeChannels {
 				channels.select(i);
 				return;
 			}
+		channels.select(-1);
 	}
 }

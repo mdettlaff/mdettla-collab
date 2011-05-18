@@ -22,4 +22,6 @@ public interface Data {
 	public void read(FeedItem feedItem);
 	
 	public boolean isRead(FeedItem feedItem);
+	
+	public List<FeedItem> search(String keywords);
 }

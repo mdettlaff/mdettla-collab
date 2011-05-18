@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
@@ -107,5 +108,30 @@ public class DataSimple implements Data {
 		public int compare(FeedItem feedItem1, FeedItem feedItem2) {
 			return 0 - feedItem1.getDate().compareTo(feedItem2.getDate());
 		}
+	}
+	
+	public List<FeedItem> search(String keywords) {
+		String[] k = keywords.trim().toLowerCase().split("\\s+");
+		String join = join(k, "|");
+		if(join == "")
+			return new LinkedList<FeedItem>();
+		String regex = ".*(" + join + ").*";
+		List<FeedItem> find = new LinkedList<FeedItem>();
+		for(FeedItem item: items.keySet())
+			if(Pattern.matches(regex, item.getTitle().toLowerCase()))
+				find.add(item);
+		return find;
+	}
+	
+	// private
+	
+	private String join(String[] s, String delimiter) {
+	    if (s == null || s.length == 0)
+	    	return "";
+	    StringBuilder builder = new StringBuilder(s[0]);
+	    for(int i = 1; i < s.length; i++) {
+	      builder.append(delimiter).append(s[i]);
+	    }
+	    return builder.toString();
 	}
 }
