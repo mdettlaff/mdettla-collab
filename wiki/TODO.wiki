@@ -2,15 +2,13 @@
 
 = TODO =
 
+
 == GUI ==
 
-  * Możliwość przeglądania listy wszystkich kanałów (1 kanał = 1 agent `WebsiteAgent`) przez użytkownika i subskrybowania tych które go interesują.
-  * Wyświetlanie listy kanałów jakie zasubskrybował użytkownik.
   * Wyświetlanie listy wiadomości (niblów) dla danego kanału lub dla wszystkich zasubskrybowanych kanałów.
-  * Wyświetlanie treści wiadomości (FeedItem.getHTMLContent()) we wbudowanej przeglądarce.
-  * Oznaczenie pogrubioną czcionką wiadomości nieprzeczytanych, możliwość wyświetlenia samych nieprzeczytanych.
-  * Możliwość odświeżenia (synchronizacji) treści wszystkich kanałów lub tylko wybranego kanału.
+
 
 == Agenty ==
 
   * Więcej agentów `WebsiteAgent` dla różnych stron, najlepiej korzystających z semantyki (biblioteka Jena).
+  * Inteligentne rekomendowanie kanałów przez agenta personalnego (klasa `RecommendationEngine`).
