@@ -1,7 +1,6 @@
 package nibblr.gui;
 
 import java.text.DateFormat;
-import java.util.Date;
 
 import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;

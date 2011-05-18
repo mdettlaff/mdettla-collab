@@ -2,6 +2,7 @@ package nibblr.data;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,8 +82,12 @@ public class DataSimple implements Data {
 	public void updateFeedItems(Feed feed) throws DataNotFoundException {
 		if(!feeds.contains(feed))
 			throw new DataNotFoundException();
-		for(FeedItem feedItem: feed.getItems())
-			items.put(feedItem, feed);
+		Feed f = feeds.get(feeds.indexOf(feed));
+		for(FeedItem feedItem: feed.getItems()) {
+			items.put(feedItem, f);
+			feedItem.setDate(new Date());
+		}
+		f.setItems(feed.getItems());
 	}
 	
 	public void read(FeedItem feedItem) {
