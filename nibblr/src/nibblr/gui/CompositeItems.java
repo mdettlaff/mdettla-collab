@@ -77,6 +77,7 @@ public class CompositeItems {
 				items.select(i);
 				return;
 			}
+		items.select(-1);
 	}
 	
 	// private

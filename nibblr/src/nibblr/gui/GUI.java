@@ -31,6 +31,7 @@ public class GUI implements Runnable {
 	
 	private boolean isAdd;
 	private boolean isRecommend;
+	private boolean isSearch;
 	
 	public GUI(Data data, FeedService feedService) {
 		this.data = data;
@@ -83,6 +84,8 @@ public class GUI implements Runnable {
 			@Override
 			public void handleFeed(Feed feed) {
 				final Feed f = feed;
+				if(!isAdd)
+					return;
 				display.syncExec(new Runnable() {
 					public void run() {
 						if(!feeds.contains(f)) {
@@ -106,13 +109,17 @@ public class GUI implements Runnable {
 				channels.setChannels(data.getFeeds());
 				channels.selectChannel(channel);
 				add.dispose();
-				isAdd = false;
 			}
 		});
 		add.addActionCancel(new Action() {
 			@Override
 			public void action() {
 				add.dispose();
+			}
+		});
+		add.addActionDispose(new Action() {
+			@Override
+			public void action() {
 				isAdd = false;
 			}
 		});
@@ -136,13 +143,17 @@ public class GUI implements Runnable {
 				channels.setChannels(data.getFeeds());
 				channels.selectChannel(channel);
 				recommend.dispose();
-				isRecommend = false;
 			}
 		});
 		recommend.addActionCancel(new Action() {
 			@Override
 			public void action() {
 				recommend.dispose();
+			}
+		});
+		recommend.addActionDispose(new Action() {
+			@Override
+			public void action() {
 				isRecommend = false;
 			}
 		});
@@ -195,13 +206,36 @@ public class GUI implements Runnable {
 	}
 	
 	private void exit() {
-		System.out.println("action -> exit");
 		shell.dispose();
+		System.exit(0);
 	}
 	
 	private void search() {
-		System.out.println("action -> search");
-		new DialogSearch(shell);
+		if(isSearch)
+			return;
+		isSearch = true;
+		final DialogSearch search = new DialogSearch(shell);
+		search.addActionFind(new Action() {
+			@Override
+			public void action() {
+				List<FeedItem> find = data.search(search.getKeywords());
+				channels.selectChannel(null);
+				items.setItems(find, data);
+				search.dispose();
+			}
+		});
+		search.addActionCancel(new Action() {
+			@Override
+			public void action() {
+				search.dispose();
+			}
+		});
+		search.addActionDispose(new Action() {
+			@Override
+			public void action() {
+				isSearch = false;
+			}
+		});
 	}
 	
 	private void preference() {

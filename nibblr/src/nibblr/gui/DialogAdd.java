@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import nibblr.domain.Feed;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -79,6 +81,11 @@ public class DialogAdd {
 		add.select(si);
 	}
 	
+	public void dispose() {
+		if(!shell.isDisposed())
+			shell.dispose();
+	}
+	
 	public void addActionOk(final Action action) {
 		ok.addSelectionListener(new SelectionListener() {
 			@Override
@@ -103,8 +110,12 @@ public class DialogAdd {
 		});
 	}
 	
-	public void dispose() {
-		if(!shell.isDisposed())
-			shell.dispose();
+	public void addActionDispose(final Action action) {
+		shell.addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				action.action();
+			}
+		});
 	}
 }
