@@ -61,6 +61,9 @@ public class GUI implements Runnable {
 		
 		isAdd = false;
 		isRecommend = false;
+		isSearch = false;
+		
+		channels.setChannels(data.getFeeds());
 		
 		action();
 		
@@ -272,7 +275,7 @@ public class GUI implements Runnable {
 		try {
 			FeedItem item = items.getItem();
 			data.read(item);
-			Feed channel = data.getFeed(item);
+			Feed channel = channels.getChannel();
 			items.setItems(data.getFeedItems(channel, filter.getFilterStat()), data);
 			items.selectItem(item);
 			view.setView(item);

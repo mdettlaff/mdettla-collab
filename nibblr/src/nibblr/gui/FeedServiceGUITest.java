@@ -53,6 +53,8 @@ public class FeedServiceGUITest implements FeedService {
 		final FeedHandler handler = feedUpdateHandler;
 		for(Feed feed: feedsToUpdate) {
 			final Feed f = feed;
+			if(!feeds.contains(f))
+				continue;
 			timer.schedule(
 				new TimerTask() {
 					@Override
