@@ -108,7 +108,8 @@ public class DataSimple implements Data {
 		for(FeedItem item: feed.getItems())
 			if(!items.containsKey(item)) {
 				items.put(item, f);
-				item.setDate(new Date());
+				if(item.getDate() == null)
+					item.setDate(new Date());
 			}
 		f.setItems(feed.getItems());
 		setFeedAll();
