@@ -8,18 +8,24 @@ import nibblr.gui.CompositeFilter.Filter;
 
 public interface Data {
 	public void addFeed(Feed feed);
-
-	public Feed getFeed(FeedItem feedItem) throws DataNotFoundException;
 	
 	public List<Feed> getFeeds();
 	
-	public List<FeedItem> getFeedItems(Feed feed, Filter filter) throws DataNotFoundException;
+	public List<Feed> getFeedsToSynchronize();
 	
-	public void removeFeed(Feed feed);
+	public boolean isFeedSynchronizable(Feed feed);
 	
-	public void updateFeedItems(Feed feed) throws DataNotFoundException;
+	public boolean isFeedAll(Feed feed);
+	
+	public List<FeedItem> getItems(Feed feed, Filter filter) throws DataNotFoundException;
+	
+	public void remove(Feed feed);
+	
+	public void update(Feed feed) throws DataNotFoundException;
 	
 	public void read(FeedItem feedItem);
+	
+	public void readAll(Feed feed) throws DataNotFoundException;
 	
 	public boolean isRead(FeedItem feedItem);
 	

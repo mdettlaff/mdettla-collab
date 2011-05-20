@@ -7,7 +7,6 @@ import nibblr.data.Data;
 import nibblr.data.DataNotFoundException;
 import nibblr.domain.Feed;
 import nibblr.domain.FeedItem;
-import nibblr.gui.CompositeFilter.Filter;
 import nibblr.service.FeedHandler;
 import nibblr.service.FeedService;
 
@@ -163,7 +162,7 @@ public class GUI implements Runnable {
 	}
 	
 	private void synchronize() {
-		feedService.updateFeeds(data.getFeeds(), new FeedHandler() {
+		feedService.updateFeeds(data.getFeedsToSynchronize(), new FeedHandler() {
 			@Override
 			public void handleFeed(Feed feed) {
 				final Feed f = feed;
@@ -171,10 +170,11 @@ public class GUI implements Runnable {
 					@Override
 					public void run() {
 						try {
-							data.updateFeedItems(f);
-							if(f == channels.getChannel()) {
+							data.update(f);
+							Feed channel = channels.getChannel();
+							if(f == channel || data.isFeedAll(channel)) {
 								FeedItem select = items.getItem();
-								items.setItems(data.getFeedItems(f, filter.getFilterStat()), data);
+								items.setItems(data.getItems(channel, filter.getFilterStat()), data);
 								items.selectItem(select);
 							}
 						} catch (DataNotFoundException e) {}
@@ -185,6 +185,8 @@ public class GUI implements Runnable {
 	}
 	
 	private void synchronize(Feed channel) {
+		if(!data.isFeedSynchronizable(channel))
+			return;
 		List<Feed> feeds = new LinkedList<Feed>();
 		feeds.add(channel);
 		feedService.updateFeeds(feeds, new FeedHandler() {
@@ -195,10 +197,10 @@ public class GUI implements Runnable {
 					@Override
 					public void run() {
 						try {
-							data.updateFeedItems(f);
+							data.update(f);
 							if(f == channels.getChannel()) {
 								FeedItem select = items.getItem();
-								items.setItems(data.getFeedItems(f, filter.getFilterStat()), data);
+								items.setItems(data.getItems(f, filter.getFilterStat()), data);
 								items.selectItem(select);
 							}
 						} catch (DataNotFoundException e) {}
@@ -259,14 +261,14 @@ public class GUI implements Runnable {
 	private void selectFilter() {
 		try {
 			Feed channel = channels.getChannel();
-			items.setItems(data.getFeedItems(channel, filter.getFilterStat()), data);
+			items.setItems(data.getItems(channel, filter.getFilterStat()), data);
 		} catch (DataNotFoundException e) {}
 	}
 	
 	private void selectChannel() {
 		try {
 			Feed channel = channels.getChannel();
-			items.setItems(data.getFeedItems(channel, filter.getFilterStat()), data);
+			items.setItems(data.getItems(channel, filter.getFilterStat()), data);
 			view.setView(channel);
 		} catch (DataNotFoundException e) {}
 	}
@@ -274,9 +276,9 @@ public class GUI implements Runnable {
 	private void selectItem() {
 		try {
 			FeedItem item = items.getItem();
-			data.read(item);
 			Feed channel = channels.getChannel();
-			items.setItems(data.getFeedItems(channel, filter.getFilterStat()), data);
+			items.setItems(data.getItems(channel, filter.getFilterStat()), data);
+			data.read(item);
 			items.selectItem(item);
 			view.setView(item);
 		} catch (DataNotFoundException e) {}
@@ -285,9 +287,8 @@ public class GUI implements Runnable {
 	private void channelMark() {
 		try {
 			Feed channel = channels.getChannel();
-			for(FeedItem item: data.getFeedItems(channel, Filter.ALL))
-				data.read(item);
-			items.setItems(data.getFeedItems(channel, filter.getFilterStat()), data);
+			data.readAll(channel);
+			items.setItems(data.getItems(channel, filter.getFilterStat()), data);
 		} catch (DataNotFoundException e) {}
 	}
 	
@@ -301,7 +302,7 @@ public class GUI implements Runnable {
 		delete.addActionOk(new Action() {
 			@Override
 			public void action() {
-				data.removeFeed(channel);
+				data.remove(channel);
 				channels.setChannels(data.getFeeds());
 				items.setItems();
 				view.setView();
