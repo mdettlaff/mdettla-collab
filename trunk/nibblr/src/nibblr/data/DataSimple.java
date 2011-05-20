@@ -19,10 +19,18 @@ public class DataSimple implements Data {
 	private Map<FeedItem, Feed> items;
 	private List<FeedItem> read;
 	
+	private Feed all;
+	
 	public DataSimple() {
 		feeds = new LinkedList<Feed>();
 		items = new LinkedHashMap<FeedItem, Feed>();
 		read = new LinkedList<FeedItem>();
+		all = new Feed();
+		all.setName("<All>");
+		all.setUrl("");
+		all.setDescription("Shows all the items in your subscribed channels");
+		all.setItems(new LinkedList<FeedItem>());
+		feeds.add(all);
 	}
 
 	@Override
@@ -31,6 +39,7 @@ public class DataSimple implements Data {
 			feeds.add(feed);
 			for(FeedItem item: feed.getItems())
 				items.put(item, feed);
+			all.setItems(new LinkedList<FeedItem>(items.keySet()));
 		}
 	}
 
@@ -73,9 +82,12 @@ public class DataSimple implements Data {
 
 	@Override
 	public void removeFeed(Feed feed) {
+		if(feed == all)
+			return;
 		feeds.remove(feed);
 		for(FeedItem item: feed.getItems())
 			items.remove(item);
+		all.setItems(new LinkedList<FeedItem>(items.keySet()));
 	}
 	
 	@Override
@@ -88,6 +100,7 @@ public class DataSimple implements Data {
 			feedItem.setDate(new Date());
 		}
 		f.setItems(feed.getItems());
+		all.setItems(new LinkedList<FeedItem>(items.keySet()));
 	}
 	
 	public void read(FeedItem feedItem) {
