@@ -95,11 +95,27 @@
 			value="joemonster:nibblr.agents.RssAgent(http://www.joemonster.org/backend.php)" />
 		<property name="debian"
 			value="debian:nibblr.agents.RssAgent(http://planet.debian.net/rss20.xml)" />
+		<property name="demotywatory"
+			value="demotywatory:nibblr.agents.RssAgent(http://demotywatory.pl/rss.xml)" />
+		<property name="reddit"
+			value="reddit:nibblr.agents.RssAgent(http://www.reddit.com/.rss)" />
+		<property name="secretagentbob"
+			value="secretagentbob:nibblr.agents.RssAgent(http://gdata.youtube.com/feeds/base/users/SecretAgentBob/uploads?alt=rss&amp;v=2&amp;orderby=published&amp;client=ytapi-youtube-profile)" />
+		<property name="thedailywtf"
+			value="thedailywtf:nibblr.agents.RssAgent(http://syndication.thedailywtf.com/TheDailyWtf)" />
+		<property name="dilbert"
+			value="dilbert:nibblr.agents.RssAgent(http://feedproxy.google.com/DilbertDailyStrip)" />
+		<property name="xkcd"
+			value="xkcd:nibblr.agents.RssAgent(http://xkcd.com/atom.xml)" />
+		<property name="schneier"
+			value="schneier:nibblr.agents.RssAgent(http://www.schneier.com/blog/index.rdf)" />
+		<property name="slashdot"
+			value="slashdot:nibblr.agents.RssAgent(http://rss.slashdot.org/slashdot/classic)" />
 		<java classname="jade.Boot" fork="true">
 			<classpath refid="run.classpath" />
 			<arg line="${args}" />
 			<arg line="-local-host localhost" />
-			<arg line="-agents ${personal};${delicious};${joemonster};${debian}" />
+			<arg line="-agents ${personal};${delicious};${joemonster};${debian};${demotywatory};${reddit};${secretagentbob};${thedailywtf};${dilbert};${xkcd};${schneier};${slashdot}" />
 		</java>
 	</target>
 
