@@ -90,13 +90,13 @@
 	<target name="run" depends="compile">
 		<property name="args" value="" />
 		<property name="personal" value="personal:nibblr.agents.PersonalAgent()" />
+		<property name="demotywatory"
+			value="demotywatory:nibblr.agents.DemotywatoryAgent()" />
 		<property name="delicious" value="delicious:nibblr.agents.DeliciousAgent()" />
 		<property name="joemonster"
 			value="joemonster:nibblr.agents.RssAgent(http://www.joemonster.org/backend.php)" />
 		<property name="debian"
 			value="debian:nibblr.agents.RssAgent(http://planet.debian.net/rss20.xml)" />
-		<property name="demotywatory"
-			value="demotywatory:nibblr.agents.RssAgent(http://demotywatory.pl/rss.xml)" />
 		<property name="reddit"
 			value="reddit:nibblr.agents.RssAgent(http://www.reddit.com/.rss)" />
 		<property name="secretagentbob"
@@ -115,7 +115,7 @@
 			<classpath refid="run.classpath" />
 			<arg line="${args}" />
 			<arg line="-local-host localhost" />
-			<arg line="-agents ${personal};${delicious};${joemonster};${debian};${demotywatory};${reddit};${secretagentbob};${thedailywtf};${dilbert};${xkcd};${schneier};${slashdot}" />
+			<arg line="-agents ${personal};${demotywatory};${delicious};${joemonster};${debian};${reddit};${secretagentbob};${thedailywtf};${dilbert};${xkcd};${schneier};${slashdot}" />
 		</java>
 	</target>
 
