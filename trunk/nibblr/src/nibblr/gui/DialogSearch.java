@@ -1,10 +1,13 @@
 package nibblr.gui;
 
+import nibblr.preferences.Preferences;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -23,6 +26,8 @@ public class DialogSearch {
 	public DialogSearch(Shell parentShell) {
 		shell = new Shell(parentShell, SWT.DIALOG_TRIM);
 		shell.setText(Values.TITLE_SEARCH);
+		shell.setImage(new Image(shell.getDisplay(),
+			Preferences.getIconsDir() + Preferences.getSeparator() + "search.png"));
 		
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;

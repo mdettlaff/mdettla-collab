@@ -8,6 +8,9 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
 public class MenuBar {
+	
+	private Shell shell;
+	
 	private Menu menu;
 	
 	private MenuItem add;
@@ -19,8 +22,10 @@ public class MenuBar {
 	private MenuItem about;
 	private MenuItem help;
 	
-	public MenuBar(final Shell shell) {
-		menu = new Menu(shell, SWT.BAR);
+	public MenuBar(Shell shell) {
+		this.shell = shell;
+		
+		menu = new Menu(this.shell, SWT.BAR);
 		shell.setMenuBar(menu);
 		// File menu
 		MenuItem sectionFile = new MenuItem(menu, SWT.CASCADE);
@@ -84,7 +89,7 @@ public class MenuBar {
 		maximize.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				shell.setMaximized(true);
+				MenuBar.this.shell.setMaximized(true);
 			}
 			
 			@Override
@@ -97,7 +102,7 @@ public class MenuBar {
 		minimize.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				shell.setMinimized(true);
+				MenuBar.this.shell.setMinimized(true);
 			}
 			
 			@Override
@@ -110,7 +115,7 @@ public class MenuBar {
 		restore.addSelectionListener(new SelectionListener() {	
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				shell.setMaximized(false);
+				MenuBar.this.shell.setMaximized(false);
 			}
 			
 			@Override
