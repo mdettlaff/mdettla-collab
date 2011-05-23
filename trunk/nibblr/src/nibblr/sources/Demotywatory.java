@@ -25,7 +25,7 @@ public class Demotywatory implements FeedSource {
 	private static final String URL = "http://demotywatory.pl/";
 	
 	private static final String PATTERN_FIELD_DAY = "(\\d{1,2})";
-	private static final String PATTERN_FIELD_MONTH = "([a-zA-Z]+)";
+	private static final String PATTERN_FIELD_MONTH = "([a-zA-Zęóąśłżźćń]+)";
 	private static final String PATTERN_FIELD_YEAR = "(\\d{4})";
 	private static final String PATTERN_FIELD_TIME = "(\\d{1,2}:\\d{1,2})";
 	
