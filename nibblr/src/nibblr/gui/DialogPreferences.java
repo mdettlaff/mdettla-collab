@@ -1,14 +1,22 @@
 package nibblr.gui;
 
+import nibblr.preferences.Preferences;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 
 public class DialogPreferences {
-	public DialogPreferences(final Shell shell) {
-		final Shell preferencesShell = new Shell(shell, SWT.DIALOG_TRIM);
-		preferencesShell.setText(Values.TITLE_PREFERENCES);
-		preferencesShell.setSize(500, 400);
+	
+	private Shell shell;
+	
+	public DialogPreferences(Shell parentShell) {
+		shell = new Shell(parentShell, SWT.DIALOG_TRIM);
+		shell.setText(Values.TITLE_PREFERENCES);
+		shell.setSize(500, 400);
+		shell.setImage(new Image(shell.getDisplay(),
+			Preferences.getIconsDir() + Preferences.getSeparator() + "preference.png"));
 		
-		preferencesShell.open();
+		shell.open();
 	}
 }

@@ -1,10 +1,10 @@
 package nibblr.gui;
 
+import nibblr.preferences.Preferences;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Display;
@@ -121,13 +121,9 @@ public class CompositeTool {
 	}
 	
 	// private
+	
 	private Image getImage(String name) {
-		Image image = new Image(display, 32, 32);
-		Color color = display.getSystemColor(SWT.COLOR_BLUE);
-		GC gc = new GC(image);
-		gc.setBackground(color);
-		gc.fillRectangle(image.getBounds());
-		gc.dispose();
-		return image;
+		return new Image(display,
+			Preferences.getIconsDir() + Preferences.getSeparator() + name);
 	}
 }

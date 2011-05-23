@@ -3,12 +3,14 @@ package nibblr.gui;
 import java.util.LinkedList;
 
 import nibblr.domain.Feed;
+import nibblr.preferences.Preferences;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -28,6 +30,8 @@ public class DialogAdd {
 		shell = new Shell(parentShell, SWT.DIALOG_TRIM);
 		shell.setText(Values.TITLE_ADD);
 		shell.setSize(500, 400);
+		shell.setImage(new Image(shell.getDisplay(),
+			Preferences.getIconsDir() + Preferences.getSeparator() + "add.png"));
 		
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
