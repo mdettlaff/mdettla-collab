@@ -61,7 +61,7 @@ public class Delicious implements FeedSource {
 	private String getXMLResponse() {
 		String url = "https://api.del.icio.us/v1/posts/get";
 		HttpRequest request = requestFactory.createRequest(url);
-		String xmlResponse = request.doGet();
+		String xmlResponse = request.doGet("Authorization", "Basic "/* CENSORED */);
 		return xmlResponse;
 	}
 

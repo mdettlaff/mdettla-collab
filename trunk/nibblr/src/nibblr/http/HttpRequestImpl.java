@@ -34,4 +34,23 @@ class HttpRequestImpl implements HttpRequest {
         }
 		return responseBody;
 	}
+
+	@Override
+	public String doGet(String headerName, String headerValue) {
+		String responseBody;
+        HttpClient httpClient = new DefaultHttpClient();
+        try {
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.addHeader(headerName, headerValue);
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            responseBody = httpClient.execute(httpGet, responseHandler);
+        } catch (ClientProtocolException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+		return responseBody;
+	}
 }

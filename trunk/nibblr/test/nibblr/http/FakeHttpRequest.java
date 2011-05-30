@@ -12,4 +12,9 @@ class FakeHttpRequest implements HttpRequest {
 	public String doGet() {
 		return response;
 	}
+
+	@Override
+	public String doGet(String headerName, String headerValue) {
+		return doGet();
+	}
 }
