@@ -46,22 +46,38 @@
 %opowiadał przed zajęciami
 \subsection{Wstęp}
 %ale głupoty :D
-W erze wszechogarniającego bałaganu \textbf{nibblr} wychodzi naprzeciw
-oczekiwaniom użytkowników i dzięki współpracy agentów wybiera dla niego to co go
-interesuje. Nibblr (ze starourduńskiego ``dziobać'') %nie wiem ;)
-po prostu wydziobuje to co jest istotne (warstwę danych?)
+\textbf{nibblr} jest wieloagentowym, przenośnym systemem umożliwiającym agregowanie heterogenicznych
+informacji z sieci World Wide Web. Na rzecz użytkownika działa agent personalny, który zbiera
+informacje od wyspecjalizowanych agentów stron (WebsiteAgent). Każdy agent strony potrafi
+podsumować zawartość strony WWW w której się specjalizuje i przedstawić ją w formie krótkiego
+opisu oraz listy nowości (tak zwanych niblów), mówiących o tym co pojawiło się nowego na danej
+stronie w ostatnim czasie. Agent personalny agreguje te informacje, po czym mogą one zostać
+wyświetlone w przejrzysty sposób użytkownikowi. Architektura agentowa jest całkowicie niezauważalna
+dla użytkownika, który może łatwo korzystać z \textbf{nibblra} podobnie jak programu pocztowego lub
+czytnika kanałów RSS.
+\newline
+\newline
+Rozproszona natura systemu agentowego przyczynia się do elastyczności programu, ponieważ możliwe
+jest dodawanie kolejnych agentów stron bez konieczności rekompilacji, a nawet ponownego uruchamiania
+programu - wystarczy dodać kolejnego agenta na platformę. Wystarczy tylko, aby dodany agent
+implementował standardowy protokół komunikacyjny stosowany w programie.
 
 \begin{center}
 	\includegraphics[scale=0.27]{./img/nibblr0.png}
 \end{center}
+
+\subsection{Informacje techniczne}
+
+Dzięki zastosowaniu technologii Java, \textbf{nibblr} jest programem przenośnym; był on testowany
+w środowiskach Linux oraz Windows. Warstwa GUI jest zaimplementowana za pomocą biblioteki SWT,
+a warstwa agentów z użyciem platformy JADE. Testy zostały napisane z użyciem biblioteki JUnit.
+Agenty komunikują się za pomocą własnej ontologii.
 
 %D: mam duże wątpliwości co do nazewnictwa ``subskrybowane kanały'' - brzmi jak
 %rss
 %nie wiem czy nie przyczepi się jakoś do tego??
 \newpage
 \subsection{Opis interfejsu}
-
-%D: można napisać że jest zrobiony w swt i że działa na linux/windows...
 
 \begin{figure}[h]
 	\includegraphics[scale=0.27]{./img/nibblr1.png}
