@@ -96,7 +96,7 @@ public class Demotywatory implements FeedSource {
 		Matcher matcher = Pattern.compile(PATTERN_DATE).matcher(string);
 		
 		if(!matcher.find())
-			throw new ParseException("", 0);
+			throw new ParseException(string, 0);
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("d M y H:m");
 		
