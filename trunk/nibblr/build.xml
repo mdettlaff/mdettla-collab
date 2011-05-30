@@ -8,11 +8,12 @@
 	<property name="test.src.dir" value="test" />
 	<property name="test.build.dir" value="${build.dir}/test-classes" />
 
+
 	<path id="compile.classpath">
 		<fileset dir="lib">
 			<include name="*.jar" />
 		</fileset>
-		<pathelement location="lib/swt/linux-x86_64/swt.jar"/>
+		<pathelement location="lib/swt/linux-x86/swt.jar"/>
 	</path>
 
 	<path id="run.classpath">
@@ -115,14 +116,12 @@
 			<arg line="${args}" />
 			<arg line="-local-host localhost" />
 			<arg line="-agents ${personal};${demotywatory};${delicious};${joemonster};${debian};${reddit};${secretagentbob};${thedailywtf};${dilbert};${xkcd};${schneier};${slashdot}" />
-			<jvmarg value="-Djava.library.path=lib/swt/linux-x86_64/" />
 		</java>
 	</target>
 
 	<target name="gui" depends="compile">
 		<java classname="nibblr.Nibblr" fork="true">
 			<classpath refid="run.classpath" />
-			<jvmarg value="-Djava.library.path=lib/swt/linux-x86_64/" />
 		</java>
 	</target>
 </project>
